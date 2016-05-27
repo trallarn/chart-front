@@ -1,0 +1,25 @@
+{
+  "name": "chart-front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/html/index.html",
+  "dependencies": {
+    "highcharts": "^4.2.5",
+    "http-server": "^0.9.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "tape": "^4.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-html": "watch 'cp -r src/html/* static/html/' src/html/ ",
+    "style-sass": "node-sass src/style/main.scss -o static/style/",
+    "watch-style-sass": "npm run style-sass && node-sass --watch  src/style/main.scss -o static/style/ ",
+    "watch-js": "watchify src/js/chart.js -o static/js/bundle.js ",
+    "watch": "npm run watch-js & npm run watch-html & npm run watch-style-sass",
+    "start": "http-server static/"
+  },
+  "author": "",
+  "license": "ISC"
+}
