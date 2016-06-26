@@ -2,14 +2,18 @@
   "name": "chart-front",
   "version": "1.0.0",
   "description": "",
-  "main": "src/html/index.html",
+  "main": "src/js/app.js",
   "dependencies": {
+    "brfs": "^1.4.3",
     "highcharts": "^4.2.5",
     "http-server": "^0.9.0",
     "jquery": "^2.2.4",
+    "knockout": "^3.4.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "exorcist": "^0.4.0",
+    "stringify": "^5.1.0",
     "tape": "^4.5.1"
   },
   "scripts": {
@@ -17,9 +21,14 @@
     "watch-html": "watch 'cp -r src/html/* static/html/' src/html/ ",
     "style-sass": "node-sass src/style/main.scss -o static/style/",
     "watch-style-sass": "npm run style-sass && node-sass --watch  src/style/main.scss -o static/style/ ",
-    "watch-js": "watchify src/js/chart.js -o static/js/bundle.js ",
+    "watch-js": "watchify -t stringify --extensions .html -e src/js/app.js src/js/**/* -o 'exorcist static/js/bundle.js.map > static/js/bundle.js' -d",
     "watch": "npm run watch-js & npm run watch-html & npm run watch-style-sass",
     "start": "http-server static/"
+  },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
   },
   "author": "",
   "license": "ISC"
