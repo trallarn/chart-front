@@ -1,0 +1,12 @@
+<div class="instrument-list" >
+    <h2>All instruments</h2>
+
+    <table >
+        <tbody data-bind="foreach: instruments()">
+            <tr data-bind="click: $parent.onElementClick">
+                <td data-bind="text: name"></td>
+                <td data-bind="text: symbol"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

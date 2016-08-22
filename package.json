@@ -19,8 +19,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch-html": "watch 'cp -r src/html/* static/html/' src/html/ ",
-    "style-sass": "node-sass src/style/main.scss -o static/style/",
-    "watch-style-sass": "npm run style-sass && node-sass --watch  src/style/main.scss -o static/style/ ",
+    "style-sass": "node-sass src/style/*.scss -o static/style/",
+    "watch-style-sass": "npm run style-sass && node-sass --watch  src/style/*.scss -o static/style/ ",
     "watch-js": "watchify -t stringify --extensions .html -e src/js/app.js src/js/**/* -o 'exorcist static/js/bundle.js.map > static/js/bundle.js' -d",
     "watch": "npm run watch-js & npm run watch-html & npm run watch-style-sass",
     "start": "http-server static/"

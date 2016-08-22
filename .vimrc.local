@@ -1,5 +1,5 @@
 " Skips these in the grep command
-let grepExcludeDir='{debug,specs,src/temp,src/export,src/thirdparty,src/scripts/templates,node_modules,mocks,webtest}'
+let grepExcludeDir='{static,debug,src/scripts/templates,node_modules}'
 let grepExclude="{*.map,*.css}"
 set path=src/**,grunt/**
 

@@ -1,0 +1,17 @@
+<div class="chart-and-list" >
+
+    <div class="chart-and-list__list" data-bind="component: {
+        name: 'instrumentList',
+        params: {
+            chartedInstrument: chartedInstrument
+        }}">
+    </div>
+
+    <div class="chart-container" data-bind="component: {
+        name: 'chart',
+        params: {
+            chartedInstrument: chartedInstrument
+        }}">
+    </div>
+
+</div>
