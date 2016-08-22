@@ -1,8 +1,10 @@
 var Highcharts = require('highcharts/highstock');
 var $ = require('jquery');
 var ko = require('knockout');
+var _ = require('underscore');
 
 ko.components.register('chart', {
+
     viewModel: function(params) {
         if(!params.chartedInstrument) {
             throw 'Must supply chartedInstrument';
@@ -12,6 +14,29 @@ ko.components.register('chart', {
             updateChart(val.symbol);
         });
 
+        /**
+         * Creates the highstock-chart without data.
+         */
+        var createChart = function() {
+            self.chart = Highcharts.StockChart('chart',  {
+                rangeSelector : {
+                    selected : 1
+                },
+                title : {
+                },
+                series : [{
+                    type: 'candlestick',
+                    //type: 'line',
+                    turboThreshold: 0,
+                    id : 'main',
+                    //data : data.quotes,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        };
+
         var updateChart = function(symbol) {
 
             // Create the chart
@@ -20,28 +45,18 @@ ko.components.register('chart', {
                 .replace('{symbol}', symbol);
 
             $.getJSON(this.url, function (data) {
-                Highcharts.StockChart('chart',  {
-                    rangeSelector : {
-                        selected : 1
-                    },
 
-                    title : {
-                        text : data.symbol + ' Stock Price'
-                    },
+                var mainSerie = self.chart.get('main');
+                mainSerie.setData(data.quotes);
 
-                    series : [{
-                        type: 'candlestick',
-                        //type: 'line',
-                        turboThreshold: 0,
-                        name : data.symbol,
-                        data : data.quotes,
-                        tooltip: {
-                            valueDecimals: 2
-                        }
-                    }]
-                });
+                self.chart.setTitle(data.symbol + ' Stock Price');
+
+                self.chart.redraw();
+
             });
         };
+
+        createChart();
 
     },
     template: require('../templates/chart.html')
