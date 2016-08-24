@@ -1,0 +1,8 @@
+<table class="instrument-table" >
+    <tbody data-bind="foreach: list()">
+        <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active }">
+            <td data-bind="text: name"></td>
+            <td data-bind="text: symbol"></td>
+        </tr>
+    </tbody>
+</table>

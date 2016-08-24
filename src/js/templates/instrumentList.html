@@ -1,12 +1,13 @@
 <div class="instrument-list" >
-    <h2>All instruments</h2>
+    <h2>Instruments</h2>
 
-    <table class="instrument_list__table" >
-        <tbody data-bind="foreach: instruments()">
-            <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active }">
-                <td data-bind="text: name"></td>
-                <td data-bind="text: symbol"></td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- ko component: {
+        name: 'instrumentTable',
+        params: {
+            list: instruments,
+            onElementClick: onElementClick
+        }
+    } -->
+    <!-- /ko -->
+    
 </div>

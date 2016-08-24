@@ -3,4 +3,8 @@
     &.active {
         background-color: #ccc;
     }
+
+    &:hover {
+        cursor: pointer;
+    }
 }
