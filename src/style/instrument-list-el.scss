@@ -4,6 +4,10 @@
         background-color: #ccc;
     }
 
+    &.compared {
+        background-color: #c55;
+    }
+
     &:hover {
         cursor: pointer;
     }

@@ -1,8 +1,9 @@
 <table class="instrument-table" >
     <tbody data-bind="foreach: list()">
-        <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active }">
+        <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active, 'compared' : compared }">
             <td data-bind="text: name"></td>
             <td data-bind="text: symbol"></td>
+            <td data-bind="click: $parent.onCompareClick, clickBubble: false, ">Comp</td>
         </tr>
     </tbody>
 </table>

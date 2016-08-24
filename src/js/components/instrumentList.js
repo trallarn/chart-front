@@ -8,11 +8,16 @@ ko.components.register('instrumentList', {
             throw 'must supply chartedInstrument';
         }
 
+        if(!params.comparedInstruments) {
+            throw 'must supply comparedInstruments';
+        }
+
         this.fetchData = function(url, list) {
 
             $.getJSON(url , function (data) {
                 var models = _.map(data, function(el) {
                     el.active = ko.observable();
+                    el.compared = ko.observable();
                     return el;
                 });
 
@@ -23,6 +28,16 @@ ko.components.register('instrumentList', {
                 console.log('Failed getting list');
             });
 
+        };
+
+        this.onCompareClick = function(el) {
+            if(self.comparedInstruments.indexOf(el) > -1) {
+                self.comparedInstruments.remove(el);
+                el.compared(false);
+            } else {
+                self.comparedInstruments.push(el);
+                el.compared(true);
+            }
         };
 
         this.onElementClick = function(el) {
@@ -38,6 +53,7 @@ ko.components.register('instrumentList', {
         var self = this;
 
         this.chartedInstrument = params.chartedInstrument;
+        this.comparedInstruments = params.comparedInstruments;
 
         this.instruments = ko.observableArray();
         this.indices = ko.observableArray();

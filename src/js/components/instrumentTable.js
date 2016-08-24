@@ -12,10 +12,17 @@ ko.components.register('instrumentTable', {
             throw 'must supply onElementClick';
         }
 
+        if(!params.onCompareClick) {
+            throw 'must supply onCompareClick';
+        }
+
         this.list = params.list;
 
         this.onElementClick = function(el) {
             params.onElementClick(el);
+        };
+        this.onCompareClick = function(el) {
+            params.onCompareClick(el);
         };
     },
     template: require('../templates/instrumentTable.html')
