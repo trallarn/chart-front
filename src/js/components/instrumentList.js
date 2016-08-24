@@ -8,24 +8,22 @@ ko.components.register('instrumentList', {
             throw 'must supply chartedInstrument';
         }
 
-        var self = this;
+        this.fetchData = function(url, list) {
 
-        this.chartedInstrument = params.chartedInstrument;
-        this.instruments = ko.observableArray();
-        this.url = 'http://localhost:3000/instruments?callback=?';
+            $.getJSON(url , function (data) {
+                var models = _.map(data, function(el) {
+                    el.active = ko.observable();
+                    return el;
+                });
 
-        $.getJSON(this.url, function (data) {
-            var models = _.map(data, function(el) {
-                el.active = ko.observable();
-                return el;
+                list(models);
+                self.onElementClick(_.first(list()));
+            })
+            .fail(function(){
+                console.log('Failed getting list');
             });
 
-            self.instruments(models);
-            self.onElementClick(_.first(self.instruments()));
-        })
-        .fail(function(){
-            console.log('Failed getting instruments');
-        });
+        };
 
         this.onElementClick = function(el) {
             if(self.chartedInstrument()) {
@@ -36,6 +34,19 @@ ko.components.register('instrumentList', {
             el.active(true);
             self.chartedInstrument(el);
         }
+
+        var self = this;
+
+        this.chartedInstrument = params.chartedInstrument;
+
+        this.instruments = ko.observableArray();
+        this.indices = ko.observableArray();
+        this.instrumentsUrl = 'http://localhost:3000/indexComponents/stockholm?callback=?';
+        this.indicesUrl = 'http://localhost:3000/indexComponents/Indices?callback=?';
+
+        this.fetchData(this.instrumentsUrl, this.instruments);
+        this.fetchData(this.indicesUrl, this.indices);
+
     },
     template: require('../templates/instrumentList.html')
 });
