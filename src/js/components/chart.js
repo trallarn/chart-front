@@ -15,16 +15,33 @@ ko.components.register('chart', {
         this.createChart = function() {
             self.chart = Highcharts.StockChart('chart',  {
                 rangeSelector : {
-                    selected : 1
+                    selected : 4
                 },
                 title : {
                 },
+                plotOptions: {
+                    series: {
+                        compare: 'percent'
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        formatter: function () {
+                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                        }
+                    },
+                    //plotLines: [{
+                    //    value: 0,
+                    //    width: 2,
+                    //    color: 'silver'
+                    //}]
+                },
                 series : [{
-                    type: 'candlestick',
-                    //type: 'line',
+                    //type: 'candlestick',
+                    //type: 'ohlc',
+                    type: 'line',
                     turboThreshold: 0,
                     id : 'main',
-                    //data : data.quotes,
                     tooltip: {
                         valueDecimals: 2
                     }
@@ -38,6 +55,8 @@ ko.components.register('chart', {
                 .replace('{symbol}', symbol);
 
             $.getJSON(url, function (data) {
+
+                self.addYValue(data);
 
                 var mainSerie = self.chart.get('main');
                 mainSerie.setData(data.quotes);
@@ -54,9 +73,11 @@ ko.components.register('chart', {
          */
         this.addComparisonData = function(datas) {
             var comparedSeries = _.map(datas, function(data) {
+                self.addYValue(data);
+
                 return {
-                    //type: 'line',
-                    type: 'candlestick',
+                    type: 'line',
+                    //type: 'ohlc',
                     turboThreshold: 0,
                     data : data.quotes,
                     tooltip: {
@@ -71,6 +92,12 @@ ko.components.register('chart', {
 
             //TODO MUST REMOVE OLD SERIES
             self.chart.redraw();
+        };
+
+        this.addYValue = function(data) {
+            _.each(data.quotes, function(quote) { 
+                quote.y = quote.close;
+            });
         };
 
         this.updateChartWithComparedSeries = function(instruments) {
@@ -101,6 +128,8 @@ ko.components.register('chart', {
         if(!params.comparedInstruments) {
             throw 'Must supply comparedInstrument';
         }
+
+        self = this;
 
         params.chartedInstrument.subscribe(function(val){
             this.updateChartWithMainSeries(val.symbol);
