@@ -4,13 +4,26 @@ var ko = require('knockout');
 
 ko.components.register('instrumentList', {
     viewModel: function(params) {
-        if(!params.chartedInstrument) {
-            throw 'must supply chartedInstrument';
+        if(!params.name) {
+            throw 'must supply name';
+        }
+        if(!params.url) {
+            throw 'must supply url';
+        }
+        if(!params.onElementClick) {
+            throw 'must supply onElementClick';
         }
 
-        if(!params.comparedInstruments) {
-            throw 'must supply comparedInstruments';
+        if(!params.onCompareClick) {
+            throw 'must supply onCompareClick';
         }
+
+        this.isFolded = ko.observable(false);
+
+        this.name = params.name;
+        this.url = params.url;
+        this.onElementClick = params.onElementClick;
+        this.onCompareClick = params.onCompareClick ;
 
         this.fetchData = function(url, list) {
 
@@ -30,38 +43,15 @@ ko.components.register('instrumentList', {
 
         };
 
-        this.onCompareClick = function(el) {
-            if(self.comparedInstruments.indexOf(el) > -1) {
-                self.comparedInstruments.remove(el);
-                el.compared(false);
-            } else {
-                self.comparedInstruments.push(el);
-                el.compared(true);
-            }
+        this.toggleTableFold = function() {
+            self.isFolded(!self.isFolded());
         };
-
-        this.onElementClick = function(el) {
-            if(self.chartedInstrument()) {
-                self.chartedInstrument().active(false);
-            }
-
-            console.log('setting charted instrument to: ' + JSON.stringify(el));
-            el.active(true);
-            self.chartedInstrument(el);
-        }
 
         var self = this;
 
-        this.chartedInstrument = params.chartedInstrument;
-        this.comparedInstruments = params.comparedInstruments;
+        this.list = ko.observableArray();
 
-        this.instruments = ko.observableArray();
-        this.indices = ko.observableArray();
-        this.instrumentsUrl = 'http://localhost:3000/indexComponents/stockholm?callback=?';
-        this.indicesUrl = 'http://localhost:3000/indexComponents/Indices?callback=?';
-
-        this.fetchData(this.instrumentsUrl, this.instruments);
-        this.fetchData(this.indicesUrl, this.indices);
+        this.fetchData(this.url, this.list);
 
     },
     template: require('../templates/instrumentList.html')

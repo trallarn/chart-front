@@ -1,25 +1,16 @@
 <div class="instrument-list" >
 
-    <h2>Indices</h2>
-    <!-- ko component: {
-        name: 'instrumentTable',
-        params: {
-            list: indices,
-            onElementClick: onElementClick,
-            onCompareClick: onCompareClick
-        }
-    } -->
-    <!-- /ko -->
-    
-    <h2>Instruments</h2>
-    <!-- ko component: {
-        name: 'instrumentTable',
-        params: {
-            list: instruments,
-            onElementClick: onElementClick,
-            onCompareClick: onCompareClick
-        }
-    } -->
-    <!-- /ko -->
+    <h2 class="instrument-list__title pointer-on-hover" data-bind="text: name, click: toggleTableFold" ></h2>
+
+    <div class="instrument-list-table" data-bind="css: { 'instrument-list-table--folded': isFolded },
+        component: {
+            name: 'instrumentTable',
+            params: {
+                list: list,
+                onElementClick: onElementClick,
+                onCompareClick: onCompareClick
+            }
+        }" >
+    </div>
 
 </div>

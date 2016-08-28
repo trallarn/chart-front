@@ -1,2 +1,12 @@
 .instrument-list {
+
+    .instrument-list-table {
+        overflow: hidden;
+        transition: height 0.2s;
+
+        &.instrument-list-table--folded {
+            height: 0;
+        }
+    }
+
 }
