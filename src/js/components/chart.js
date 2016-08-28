@@ -7,6 +7,8 @@ ko.components.register('chart', {
 
     viewModel: function(params) {
 
+        self = this;
+
         this.dailyQuotesUrl = 'http://localhost:3000/daily/{symbol}?chartType=ohlc&callback=?';
 
         /**
@@ -41,7 +43,7 @@ ko.components.register('chart', {
                     //type: 'ohlc',
                     type: 'line',
                     turboThreshold: 0,
-                    id : 'main',
+                    id: 'main',
                     tooltip: {
                         valueDecimals: 2
                     }
@@ -68,6 +70,10 @@ ko.components.register('chart', {
             });
         };
 
+        this.toComparisonId = function(symbol) {
+            return 'comp-' + symbol;
+        };
+
         /**
          * Adds compared series to the chart.
          */
@@ -78,6 +84,7 @@ ko.components.register('chart', {
                 return {
                     type: 'line',
                     //type: 'ohlc',
+                    id: self.toComparisonId(data.symbol),
                     turboThreshold: 0,
                     data : data.quotes,
                     tooltip: {
@@ -90,7 +97,6 @@ ko.components.register('chart', {
                 self.chart.addSeries(series, false);
             });
 
-            //TODO MUST REMOVE OLD SERIES
             self.chart.redraw();
         };
 
@@ -119,6 +125,18 @@ ko.components.register('chart', {
                 }.bind(this));
 
             }.bind(this));
+
+            // Remove uncompared series
+            var seriesToRemove = _.filter(self.chart.series, function(serie) {
+                return !serie.options.isInternal && serie.options.id !== 'main' && !_.find(instruments, function(instrument) {
+                    return self.toComparisonId(instrument.symbol) === serie.options.id;
+                });
+            });
+
+            _.each(seriesToRemove, function(serie) {
+                serie.remove(false);
+            });
+
         };
 
         if(!params.chartedInstrument) {
@@ -128,8 +146,6 @@ ko.components.register('chart', {
         if(!params.comparedInstruments) {
             throw 'Must supply comparedInstrument';
         }
-
-        self = this;
 
         params.chartedInstrument.subscribe(function(val){
             this.updateChartWithMainSeries(val.symbol);
