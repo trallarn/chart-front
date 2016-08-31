@@ -23,20 +23,7 @@ ko.components.register('chart', {
                 },
                 plotOptions: {
                     series: {
-                        compare: 'percent'
                     }
-                },
-                yAxis: {
-                    labels: {
-                        formatter: function () {
-                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                        }
-                    },
-                    //plotLines: [{
-                    //    value: 0,
-                    //    width: 2,
-                    //    color: 'silver'
-                    //}]
                 },
                 series : [{
                     //type: 'candlestick',
@@ -94,7 +81,7 @@ ko.components.register('chart', {
             });
 
             _.each(comparedSeries, function(series) {
-                self.chart.addSeries(series, false);
+                var s = self.chart.addSeries(series, false);
             });
 
             self.chart.redraw();
@@ -121,6 +108,7 @@ ko.components.register('chart', {
 
                     if(count === instruments.length) {
                         this.addComparisonData(datas);
+                        self.setCompareChart();
                     }
                 }.bind(this));
 
@@ -137,6 +125,34 @@ ko.components.register('chart', {
                 serie.remove(false);
             });
 
+
+            if(instruments.length === 0) {
+                self.setNoCompareChart();
+            }
+        };
+
+        this.setCompareChart = function() {
+            var y = self.chart.yAxis[0];
+            y.setCompare('percent');
+            y.update({
+                labels: {
+                    formatter: function () {
+                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                    }
+                }
+            });
+        };
+
+        this.setNoCompareChart = function() {
+            var y = self.chart.yAxis[0];
+            y.setCompare();
+            y.update({
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                }
+            });
         };
 
         if(!params.chartedInstrument) {
