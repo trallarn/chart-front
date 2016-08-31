@@ -26,9 +26,9 @@ ko.components.register('chart', {
                     }
                 },
                 series : [{
-                    //type: 'candlestick',
+                    type: 'candlestick',
                     //type: 'ohlc',
-                    type: 'line',
+                    //type: 'line',
                     turboThreshold: 0,
                     id: 'main',
                     tooltip: {
@@ -36,6 +36,10 @@ ko.components.register('chart', {
                     }
                 }]
             });
+        };
+
+        this.getMainSerie = function() {
+            return self.chart.get('main');
         };
 
         this.updateChartWithMainSeries = function(symbol) {
@@ -47,8 +51,7 @@ ko.components.register('chart', {
 
                 self.addYValue(data);
 
-                var mainSerie = self.chart.get('main');
-                mainSerie.setData(data.quotes);
+                self.getMainSerie().setData(data.quotes);
 
                 self.chart.setTitle(data.symbol + ' Stock Price');
 
@@ -141,6 +144,7 @@ ko.components.register('chart', {
                     }
                 }
             });
+            self.getMainSerie().update({type: 'line'});
         };
 
         this.setNoCompareChart = function() {
@@ -153,6 +157,7 @@ ko.components.register('chart', {
                     }
                 }
             });
+            self.getMainSerie().update({type: 'candlestick'});
         };
 
         if(!params.chartedInstrument) {
