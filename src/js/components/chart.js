@@ -91,7 +91,6 @@ ko.components.register('chart', {
                 var s = self.chart.addSeries(series);
             });
 
-            self.chart.redraw();
         };
 
         this.addYValue = function(data) {
@@ -138,6 +137,8 @@ ko.components.register('chart', {
         };
 
         this.setCompareChart = function() {
+            self.getMainSerie().update({ type: 'line' });
+
             var y = self.chart.yAxis[0];
             y.setCompare('percent');
             y.update({
@@ -147,10 +148,12 @@ ko.components.register('chart', {
                     }
                 }
             });
-            self.getMainSerie().update({type: 'line'});
+
         };
 
         this.setNoCompareChart = function() {
+            self.getMainSerie().update({type: 'candlestick'});
+
             var y = self.chart.yAxis[0];
             y.setCompare();
             y.update({
@@ -160,7 +163,6 @@ ko.components.register('chart', {
                     }
                 }
             });
-            self.getMainSerie().update({type: 'candlestick'});
         };
 
         if(!params.chartedInstrument) {
