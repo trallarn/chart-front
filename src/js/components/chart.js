@@ -88,7 +88,7 @@ ko.components.register('chart', {
             });
 
             _.each(comparedSeries, function(series) {
-                var s = self.chart.addSeries(series, false);
+                var s = self.chart.addSeries(series);
             });
 
             self.chart.redraw();
@@ -131,7 +131,6 @@ ko.components.register('chart', {
             _.each(seriesToRemove, function(serie) {
                 serie.remove(false);
             });
-
 
             if(instruments.length === 0) {
                 self.setNoCompareChart();
