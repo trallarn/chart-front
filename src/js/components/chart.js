@@ -25,10 +25,12 @@ ko.components.register('chart', {
                     series: {
                     }
                 },
+                tooltip: {
+                    pointFormat: require('../templates/highchartPointFormat.html'),
+                    valueDecimals: 2
+                },
                 series : [{
                     type: 'candlestick',
-                    //type: 'ohlc',
-                    //type: 'line',
                     turboThreshold: 0,
                     id: 'main',
                     tooltip: {
@@ -52,6 +54,7 @@ ko.components.register('chart', {
                 self.addYValue(data);
 
                 self.getMainSerie().setData(data.quotes);
+                self.getMainSerie().name = data.symbol;
 
                 self.chart.setTitle(data.symbol + ' Stock Price');
 
@@ -75,6 +78,7 @@ ko.components.register('chart', {
                     type: 'line',
                     //type: 'ohlc',
                     id: self.toComparisonId(data.symbol),
+                    name: data.symbol,
                     turboThreshold: 0,
                     data : data.quotes,
                     tooltip: {
