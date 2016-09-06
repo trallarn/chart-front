@@ -44,10 +44,14 @@ ko.components.register('chart', {
             return self.chart.get('main');
         };
 
-        this.updateChartWithMainSeries = function(symbol) {
+        this.updateChartWithMainSeries = function(symbol, refreshData) {
 
             var url = this.dailyQuotesUrl
                 .replace('{symbol}', symbol);
+
+            if(refreshData) {
+                url += '&refreshData=1';
+            }
 
             $.getJSON(url, function (data) {
 
@@ -163,6 +167,10 @@ ko.components.register('chart', {
                     }
                 }
             });
+        };
+
+        this.refreshData = function() {
+            this.updateChartWithMainSeries(params.chartedInstrument().symbol, true);
         };
 
         if(!params.chartedInstrument) {
