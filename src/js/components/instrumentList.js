@@ -10,20 +10,15 @@ ko.components.register('instrumentList', {
         if(!params.url) {
             throw 'must supply url';
         }
-        if(!params.onElementClick) {
-            throw 'must supply onElementClick';
-        }
 
-        if(!params.onCompareClick) {
-            throw 'must supply onCompareClick';
-        }
+        var self = this;
 
         this.isFolded = ko.observable(false);
 
         this.name = params.name;
         this.url = params.url;
-        this.onElementClick = params.onElementClick;
-        this.onCompareClick = params.onCompareClick ;
+        this.chartedInstrument = params.chartedInstrument;
+        this.comparedInstruments = params.comparedInstruments;
 
         this.fetchData = function(url, list) {
 
@@ -45,6 +40,26 @@ ko.components.register('instrumentList', {
 
         this.toggleTableFold = function() {
             self.isFolded(!self.isFolded());
+        };
+
+        this.onElementClick = function(el) {
+            if(self.chartedInstrument()) {
+                self.chartedInstrument().active(false);
+            }
+
+            console.log('setting charted instrument to: ' + JSON.stringify(el));
+            el.active(true);
+            self.chartedInstrument(el);
+        };
+
+        this.onCompareClick = function(el) {
+            if(self.comparedInstruments.indexOf(el) > -1) {
+                self.comparedInstruments.remove(el);
+                el.compared(false);
+            } else {
+                self.comparedInstruments.push(el);
+                el.compared(true);
+            }
         };
 
         var self = this;

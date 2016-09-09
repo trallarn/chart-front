@@ -13,29 +13,9 @@ ko.components.register('instrumentLists', {
             throw 'must supply chartedInstrument';
         }
 
-        if(!params.comparedInstruments) {
-            throw 'must supply comparedInstruments';
+        if(!params.comparedInstruments ) {
+            throw 'must supply comparedInstruments ';
         }
-
-        this.onCompareClick = function(el) {
-            if(self.comparedInstruments.indexOf(el) > -1) {
-                self.comparedInstruments.remove(el);
-                el.compared(false);
-            } else {
-                self.comparedInstruments.push(el);
-                el.compared(true);
-            }
-        };
-
-        this.onElementClick = function(el) {
-            if(self.chartedInstrument()) {
-                self.chartedInstrument().active(false);
-            }
-
-            console.log('setting charted instrument to: ' + JSON.stringify(el));
-            el.active(true);
-            self.chartedInstrument(el);
-        };
 
         this.lists = ko.observableArray([
             {

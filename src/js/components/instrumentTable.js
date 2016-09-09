@@ -8,8 +8,8 @@ ko.components.register('instrumentTable', {
             throw 'must supply list';
         }
 
-        if(!params.onElementClick) {
-            throw 'must supply onElementClick';
+        if(!params.onElementClick ) {
+            throw 'must supply onElementClick ';
         }
 
         if(!params.onCompareClick) {
@@ -17,13 +17,9 @@ ko.components.register('instrumentTable', {
         }
 
         this.list = params.list;
+        this.onElementClick = params.onElementClick;
+        this.onCompareClick = params.onCompareClick;
 
-        this.onElementClick = function(el) {
-            params.onElementClick(el);
-        };
-        this.onCompareClick = function(el) {
-            params.onCompareClick(el);
-        };
     },
     template: require('../templates/instrumentTable.html')
 });
