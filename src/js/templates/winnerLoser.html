@@ -1,0 +1,23 @@
+<div>
+
+    <h3>Date interval</h3>
+
+    <label for="from">From: </label>
+    <input name="from" type="text" data-bind="textInput: from" />
+    <label for="to">To: </label>
+    <input name="to" type="text" data-bind="textInput: to" />
+    <button name="update" data-bind="click: updateList" >Update</button>
+    <p data-bind="text: feedback" ></p>
+
+</div>
+
+
+<div data-bind="component: {
+    name: 'instrumentLists',
+    params: {
+        lists: lists,
+        chartedInstrument: chartedInstrument,
+        comparedInstruments: comparedInstruments
+    }
+}">
+</div>

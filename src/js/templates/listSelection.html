@@ -1,0 +1,18 @@
+<div data-bind="visible: currentMenuItem() === 'Instruments', component: {
+    name: 'instrumentListsInstruments',
+    params: {
+        chartedInstrument: chartAndList.chartedInstrument,
+        comparedInstruments: chartAndList.comparedInstruments
+    }}">
+</div>
+
+
+<div data-bind="visible: currentMenuItem() === 'WinnerLoser', component: {
+    name: 'winnerLoser',
+    params: {
+        chartedInstrument: chartAndList.chartedInstrument,
+        comparedInstruments: chartAndList.comparedInstruments
+    }}">
+</div>
+
+

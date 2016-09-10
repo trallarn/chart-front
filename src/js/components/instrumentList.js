@@ -22,6 +22,11 @@ ko.components.register('instrumentList', {
 
         this.fetchData = function(url, list) {
 
+            if(!url) {
+                console.log('invalid url: "' + url + '"');
+                return false;
+            }
+
             $.getJSON(url , function (data) {
                 var models = _.map(data, function(el) {
                     el.active = ko.observable();
@@ -66,7 +71,14 @@ ko.components.register('instrumentList', {
 
         this.list = ko.observableArray();
 
-        this.fetchData(this.url, this.list);
+        if(typeof self.url === 'function') {
+            self.fetchData(self.url(), self.list);
+            self.url.subscribe(function() {
+                self.fetchData(self.url(), self.list);
+            });
+        } else {
+            self.fetchData(self.url, self.list);
+        }
 
     },
     template: require('../templates/instrumentList.html')

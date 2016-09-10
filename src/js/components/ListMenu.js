@@ -5,25 +5,31 @@ var ko = require('knockout');
 ko.components.register('listMenu', {
     viewModel: function(params) {
 
+        if(!params.currentMenuItem) {
+            throw 'Supply currentMenuItem';
+        }
+
         var self = this;
 
         self.menuItems = [
             {
                 display: 'Instruments',
-                item: ''
+                item: 'Instruments'
             },
             {
-                display: 'WinnersLosers',
-                item: ''
+                display: 'WinnerLoser',
+                item: 'WinnerLoser'
             }
 
         ];
 
+        self.currentMenuItem = params.currentMenuItem;
+
         this.params = params;
 
         self.selectMenuItem = function(el) {
-            console.log('onclick ');
-            console.dir(el);
+            console.log('on menu item click. Setting item ' + el.item);
+            self.currentMenuItem(el.item);
         };
 
     },

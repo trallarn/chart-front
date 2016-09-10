@@ -10,17 +10,21 @@
 
     
     <div class="chart-and-list__list" >
+
         <div data-bind="component: {
-            name: 'listMenu'
+            name: 'listMenu',
+            params: {
+                currentMenuItem: currentMenuItem
+            }
         }" >
         </div>
 
         <div data-bind="component: {
-            name: 'instrumentLists',
+            name: 'listSelection',
             params: {
-                chartedInstrument: chartedInstrument,
-                comparedInstruments: comparedInstruments
-            }}">
+                chartAndList: $data
+            }
+        }" >
         </div>
 
     </div>

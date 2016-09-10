@@ -2,7 +2,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
 
-ko.components.register('instrumentLists', {
+ko.components.register('instrumentListsInstruments', {
     viewModel: function(params) {
 
         var self = this;
@@ -16,11 +16,18 @@ ko.components.register('instrumentLists', {
         if(!params.comparedInstruments ) {
             throw 'must supply comparedInstruments ';
         }
-        if(!params.lists ) {
-            throw 'must supply lists ';
-        }
 
-        this.lists = params.lists;
+        this.lists = ko.observableArray([
+            {
+                name: 'Indices',
+                url:  'http://localhost:3000/indexComponents/Indices?callback=?'
+            },
+            {
+                name: 'Stockholm',
+                url:  'http://localhost:3000/indexComponents/stockholm?callback=?'
+            }
+        ]);
+
         this.chartedInstrument = params.chartedInstrument;
         this.comparedInstruments = params.comparedInstruments;
 
