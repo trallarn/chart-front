@@ -3,10 +3,16 @@
     margin: 10px 10px;
     padding: 0;
 
-    li {
+    .list-menu-item {
+        $item-background: #91B6FF;
+
         @extend .pointer-on-hover;
         display: inline;
-        background-color: #91B6FF;
+        background-color: $item-background;
         padding: 5px 10px;
+
+        &.list-menu-item--selected {
+            background-color: darken($item-background, 10%);
+        }
     }
 }
