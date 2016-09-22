@@ -6,6 +6,8 @@
     <input name="from" type="text" data-bind="textInput: from" />
     <label for="to">To: </label>
     <input name="to" type="text" data-bind="textInput: to" />
+    <label for="index">Index: </label>
+    <select name="index" type="select" data-bind="options: indices, selectedOptions: selectedIndex" ></select>
     <button name="update" data-bind="click: updateList" >Update</button>
     <p class="feedback" data-bind="text: feedback" ></p>
 

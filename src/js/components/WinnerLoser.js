@@ -34,14 +34,27 @@ ko.components.register('winnerLoser', {
             self.feedback('');
             
             var url = self.baseUrl
+                .replace('{index}', self.selectedIndex())
                 .replace('{from}', self.from())
                 .replace('{to}', self.to());
 
             self.lists()[0].url(url);
         };
 
+        self.fetchIndices = function() {
+            $.getJSON(self.indicesUrl, function(data) {
+                self.indices(_.pluck(data, 'name'));
+            })
+            .fail(function(){
+                console.log('Failed getting indices');
+            });
+        };
+
         //TODO: build back end for new endpoint that takes fromDate toDate
-        self.baseUrl = 'http://localhost:3000/instruments/change?index=Indices&from={from}&to={to}&callback=?';
+        self.baseUrl = 'http://localhost:3000/instruments/change?index={index}&from={from}&to={to}&callback=?';
+        self.indicesUrl = 'http://localhost:3000/indices?callback=?';
+        self.indices = ko.observableArray();
+        self.selectedIndex = ko.observable();
         self.feedback = ko.observable();
         self.chartedInstrument = params.chartedInstrument;
         self.comparedInstruments = params.comparedInstruments;
@@ -49,6 +62,7 @@ ko.components.register('winnerLoser', {
         self.from = ko.observable();
         self.to = ko.observable();
 
+        self.fetchIndices();
     },
     template: require('../templates/winnerLoser.html')
 });
