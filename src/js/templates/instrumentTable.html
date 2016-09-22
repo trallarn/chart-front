@@ -3,6 +3,15 @@
         <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active, 'compared' : compared }">
             <td data-bind="text: name"></td>
             <td data-bind="text: symbol"></td>
+
+            <!-- ko if: $data.extra -->
+                <!-- ko if: $data.extra.change -->
+                <td data-bind="text: extra.change.change"></td>
+                <td data-bind="text: extra.change.fromQuote.close"></td>
+                <td data-bind="text: extra.change.toQuote.close"></td>
+                <!-- /ko -->
+            <!-- /ko -->
+
             <td data-bind="click: $parent.onCompareClick, clickBubble: false, ">Comp</td>
         </tr>
     </tbody>

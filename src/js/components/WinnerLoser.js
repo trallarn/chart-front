@@ -23,24 +23,25 @@ ko.components.register('winnerLoser', {
         ]);
 
         self.updateList = function() {
-            var fromDate = new Date(self.from);
-            var toDate = new Date(self.to);
+            var fromDate = new Date(self.from());
+            var toDate = new Date(self.to());
 
-            if(isNaN(fromDate.getDate()) || isNaN(toDate.getDate())) {
+            if(isNaN(fromDate.getDate())) {
                 self.feedback('Invalid date');
+                return;
             }
 
             self.feedback('');
             
             var url = self.baseUrl
-                .replace('{from}', self.from)
-                .replace('{to}', self.to);
+                .replace('{from}', self.from())
+                .replace('{to}', self.to());
 
             self.lists()[0].url(url);
         };
 
         //TODO: build back end for new endpoint that takes fromDate toDate
-        self.baseUrl = 'http://localhost:3000/indexComponents/stockholm?callback=?';
+        self.baseUrl = 'http://localhost:3000/instruments/change?index=Indices&from={from}&to={to}&callback=?';
         self.feedback = ko.observable();
         self.chartedInstrument = params.chartedInstrument;
         self.comparedInstruments = params.comparedInstruments;
