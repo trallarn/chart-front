@@ -17,6 +17,7 @@ ko.components.register('instrumentTable', {
         }
 
         this.list = params.list;
+        this.listType = params.listType;
         this.onElementClick = params.onElementClick;
         this.onCompareClick = params.onCompareClick;
 

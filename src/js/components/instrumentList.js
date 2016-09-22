@@ -17,6 +17,7 @@ ko.components.register('instrumentList', {
 
         this.name = params.name;
         this.url = params.url;
+        this.listType = params.listType;
         this.chartedInstrument = params.chartedInstrument;
         this.comparedInstruments = params.comparedInstruments;
 

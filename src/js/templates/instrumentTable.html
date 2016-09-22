@@ -1,4 +1,14 @@
 <table class="instrument-table" >
+    <thead>
+        <th class="instrument-table-header" >Name</th>
+        <th class="instrument-table-header" >Symbol</th>
+        <!-- ko if: listType === 'change' -->
+        <th class="instrument-table-header" >Change</th>
+        <th class="instrument-table-header" >From</th>
+        <th class="instrument-table-header" >To</th>
+        <!-- /ko -->
+        <th class="instrument-table-header" >Actions</th>
+    </thead>
     <tbody data-bind="foreach: list()">
         <tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active, 'compared' : compared }">
             <td data-bind="text: name"></td>

@@ -18,7 +18,8 @@ ko.components.register('winnerLoser', {
         this.lists = ko.observableArray([
             {
                 name: 'Stockholm',
-                url:  ko.observable()
+                url:  ko.observable(),
+                listType: 'change'
             }
         ]);
 
