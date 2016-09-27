@@ -14,4 +14,21 @@
         }" >
     </div>
 
+    <!-- ko if: showErrorList -->
+    <h2 class="instrument-list__title pointer-on-hover" data-bind="text: errorName, click: toggleTableFold" ></h2>
+
+    <div class="instrument-list-table" data-bind="css: { 'instrument-list-table--folded': isFolded },
+        component: {
+            name: 'instrumentTable',
+            params: {
+                list: errorList,
+                listType: 'error',
+                onElementClick: onElementClick,
+                onCompareClick: onCompareClick
+            }
+        }" >
+    </div>
+
+    <!-- /ko -->
+
 </div>

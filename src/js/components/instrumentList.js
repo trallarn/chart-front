@@ -16,12 +16,14 @@ ko.components.register('instrumentList', {
         this.isFolded = ko.observable(false);
 
         this.name = params.name;
+        this.errorName = this.name + ' (in error)';
         this.url = params.url;
         this.listType = params.listType;
         this.chartedInstrument = params.chartedInstrument;
         this.comparedInstruments = params.comparedInstruments;
+        this.showErrorList = params.showErrorList;
 
-        this.fetchData = function(url, list) {
+        this.fetchData = function(url, list, errorList) {
 
             if(!url) {
                 console.log('invalid url: "' + url + '"');
@@ -35,7 +37,15 @@ ko.components.register('instrumentList', {
                     return el;
                 });
 
-                list(models);
+                var errorFilter = function(instrument) {
+                    return instrument.extra && instrument.extra.error || false;
+                };
+
+                var includedModels = _.reject(models, errorFilter);
+                var excludedModels = _.filter(models, errorFilter);
+
+                list(includedModels);
+                errorList(excludedModels);
                 self.onElementClick(_.first(list()));
             })
             .fail(function(){
@@ -71,14 +81,15 @@ ko.components.register('instrumentList', {
         var self = this;
 
         this.list = ko.observableArray();
+        this.errorList = ko.observableArray();
 
         if(typeof self.url === 'function') {
-            self.fetchData(self.url(), self.list);
+            self.fetchData(self.url(), self.list, self.errorList);
             self.url.subscribe(function() {
-                self.fetchData(self.url(), self.list);
+                self.fetchData(self.url(), self.list, self.errorList);
             });
         } else {
-            self.fetchData(self.url, self.list);
+            self.fetchData(self.url, self.list, self.errorList);
         }
 
     },

@@ -61,7 +61,17 @@ ko.components.register('instrumentTable', {
                         order: 15
                     }
                 ]);
+            } else if(this.listType === 'error') {
+                columns = columns.concat([
+                    {
+                        name: 'Error',
+                        getVal: function(row) { return row.extra.error; },
+                        sorted:0,
+                        order: 11
+                    }
+                ]);
             };
+
 
             columns.sort(function(el1, el2) {
                 return el1.order === el2.order ? 0 : el1.order > el2.order;
@@ -80,7 +90,7 @@ ko.components.register('instrumentTable', {
         this.lastSortedColumn = false;
 
         this.sort = function(column) {
-            if(self.lastSortedColumn) {
+            if(self.lastSortedColumn && self.lastSortedColumn !== column) {
                 self.lastSortedColumn.sorted = 0;
             }
 

@@ -12,11 +12,19 @@
             <td class="instrument-table-body-row" data-bind="text: symbol"></td>
 
             <!-- ko if: $data.extra -->
-                <!-- ko if: $data.extra.change -->
-                <td class="instrument-table-body-row" data-bind="text: extra.change.change"></td>
-                <td class="instrument-table-body-row" data-bind="text: extra.change.fromQuote.close"></td>
-                <td class="instrument-table-body-row" data-bind="text: extra.change.toQuote.close"></td>
+                <!-- ko if: $data.extra.error -->
+                <td class="instrument-table-body-row" data-bind="text: extra.error"></td>
                 <!-- /ko -->
+                <!-- ko if: !$data.extra.error -->
+
+                    <!-- ko if: $data.extra.change -->
+                    <td class="instrument-table-body-row" data-bind="text: extra.change.change"></td>
+                    <td class="instrument-table-body-row" data-bind="text: extra.change.fromQuote.close"></td>
+                    <td class="instrument-table-body-row" data-bind="text: extra.change.toQuote.close"></td>
+                    <!-- /ko -->
+
+                <!-- /ko -->
+
             <!-- /ko -->
 
             <td class="instrument-table-body-row" data-bind="click: $parent.onCompareClick, clickBubble: false, ">Comp</td>

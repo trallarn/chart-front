@@ -20,7 +20,8 @@ ko.components.register('winnerLoser', {
             {
                 name: 'Stockholm',
                 url:  ko.observable(),
-                listType: 'change'
+                listType: 'change',
+                showErrorList: true
             }
         ]);
 
