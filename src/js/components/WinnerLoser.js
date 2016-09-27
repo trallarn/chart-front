@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
+var stateRW = require('../infrastructure/StateRW');
 
 ko.components.register('winnerLoser', {
     viewModel: function(params) {
@@ -40,16 +41,43 @@ ko.components.register('winnerLoser', {
                 .replace('{to}', self.to());
 
             self.lists()[0].url(url);
+
+            self.saveState();
         };
 
-        self.fetchIndices = function() {
+        self.saveState = function() {
+            stateRW.save(self.stateId, {
+                from: self.from(),
+                to: self.to(),
+                selectedIndex: self.selectedIndex()
+            });
+        };
+
+        self.loadState = function() {
+            var state = stateRW.read(self.stateId);
+            
+            if(state) {
+                self.from(state.from);
+                self.to(state.to);
+                self.selectedIndex(state.selectedIndex);
+                self.updateList();
+            }
+        };
+
+        self.fetchIndices = function(callback) {
             $.getJSON(self.indicesUrl, function(data) {
                 self.indices(_.pluck(data, 'name'));
+
+                if(callback) { 
+                    callback();
+                }
             })
             .fail(function(){
                 console.log('Failed getting indices');
             });
         };
+
+        self.stateId = 'WinnerLoser';
 
         //TODO: build back end for new endpoint that takes fromDate toDate
         self.baseUrl = 'http://localhost:3000/instruments/change?index={index}&from={from}&to={to}&callback=?';
@@ -63,7 +91,9 @@ ko.components.register('winnerLoser', {
         self.from = ko.observable();
         self.to = ko.observable();
 
-        self.fetchIndices();
+        self.fetchIndices(function() { 
+            self.loadState();
+        });
     },
     template: require('../templates/winnerLoser.html')
 });

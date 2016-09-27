@@ -1,7 +1,14 @@
 .instrument-table {
+    $rowPadding: 5px;
+
     border-collapse: collapse;
 
     .instrument-table-header {
         text-align: left;
+        padding-right: $rowPadding;
+    }
+
+    .instrument-table-body-row {
+        padding-right: $rowPadding;
     }
 }
