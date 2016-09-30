@@ -9,24 +9,26 @@
     </div>
 
     
-    <div class="chart-and-list__list" >
+    <div class="chart-and-list__list " >
+        <div class="list-main-module" >
 
-        <div data-bind="component: {
-            name: 'listMenu',
-            params: {
-                currentMenuItem: currentMenuItem
-            }
-        }" >
+            <div data-bind="component: {
+                name: 'listMenu',
+                params: {
+                    currentMenuItem: currentMenuItem
+                }
+            }" >
+            </div>
+
+            <!-- ko component: {
+                name: 'listSelection',
+                params: {
+                    chartAndList: $data
+                }
+            } -->
+            <!-- /ko -->
+
         </div>
-
-        <!-- ko component: {
-            name: 'listSelection',
-            params: {
-                chartAndList: $data
-            }
-        } -->
-        <!-- /ko -->
-
     </div>
 
 </div>
