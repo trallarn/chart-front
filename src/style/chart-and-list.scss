@@ -1,4 +1,5 @@
 .chart-and-list {
+    font-family: monospace;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -8,6 +9,7 @@
     .chart-and-list__list {
         flex-grow: 1;
         overflow: auto;
+        margin-left: 10px;
     }
 }
 
@@ -17,7 +19,10 @@
         flex-direction: row;
     }
 
-    .chart-and-list__list, 
+    .chart-and-list__list {
+        width: 50%;
+    }
+
     .chart-and-list__chart {
         width: 50%;
     }
