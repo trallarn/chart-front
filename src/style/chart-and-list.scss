@@ -10,6 +10,9 @@
         flex-grow: 1;
         overflow: auto;
         margin-left: 10px;
+        //TODO MOVE to component
+        display: flex;
+        flex-direction: column;
     }
 }
 
