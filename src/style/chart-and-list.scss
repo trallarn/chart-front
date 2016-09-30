@@ -11,3 +11,15 @@
     }
 }
 
+// Row layout for large screens
+@media (min-width: 1100px) {
+    .chart-and-list {
+        flex-direction: row;
+    }
+
+    .chart-and-list__list, 
+    .chart-and-list__chart {
+        width: 50%;
+    }
+}
+
