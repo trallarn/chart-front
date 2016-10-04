@@ -16,7 +16,17 @@ ko.components.register('instrumentList', {
         this.isFolded = ko.observable(false);
 
         this.name = params.name;
-        this.errorName = this.name + ' (in error)';
+
+        this.errorName = ko.observable('');
+
+        if(typeof this.name === 'function') {
+            this.name.subscribe(function(val) {
+                self.errorName(val + ' (in error)');
+            });
+        } else {
+            self.errorName(this.name + ' (in error)');
+        }
+
         this.url = params.url;
         this.listType = params.listType;
         this.chartedInstrument = params.chartedInstrument;

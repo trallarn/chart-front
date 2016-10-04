@@ -18,7 +18,7 @@ ko.components.register('winnerLoser', {
 
         this.lists = ko.observableArray([
             {
-                name: 'Stockholm',
+                name: ko.observable(''),
                 url:  ko.observable(),
                 listType: 'change',
                 showErrorList: true
@@ -42,6 +42,7 @@ ko.components.register('winnerLoser', {
                 .replace('{to}', self.to());
 
             self.lists()[0].url(url);
+            self.lists()[0].name(self.selectedIndex());
 
             self.saveState();
         };
