@@ -23,6 +23,14 @@ ko.components.register('instrumentListsInstruments', {
                 url:  'http://localhost:3000/indexComponents/Indices?callback=?'
             },
             {
+                name: 'Currencies',
+                url:  'http://localhost:3000/indexComponents/Currencies?callback=?'
+            },
+            {
+                name: 'Commodities',
+                url:  'http://localhost:3000/indexComponents/Commodities?callback=?'
+            },
+            {
                 name: 'Stockholm',
                 url:  'http://localhost:3000/indexComponents/stockholm?callback=?'
             }
