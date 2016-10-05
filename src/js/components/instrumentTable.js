@@ -48,7 +48,7 @@ ko.components.register('instrumentTable', {
             if(this.listType === 'change') {
                 columns = columns.concat([
                     {
-                        name: 'Change',
+                        name: 'Change [%]',
                         getVal: function(row) { return row.extra.change.change; },
                         sorted:0,
                         order: 13
