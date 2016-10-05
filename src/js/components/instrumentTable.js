@@ -21,6 +21,11 @@ ko.components.register('instrumentTable', {
         this.setupColumns = function() {
             var columns = [
                 {
+                    name: '',
+                    sorted:0,
+                    order: 0
+                },
+                {
                     name: 'Name',
                     prop: 'name',
                     sorted:0,
@@ -61,6 +66,7 @@ ko.components.register('instrumentTable', {
                         order: 15
                     }
                 ]);
+
             } else if(this.listType === 'error') {
                 columns = columns.concat([
                     {
@@ -85,6 +91,8 @@ ko.components.register('instrumentTable', {
         this.listType = params.listType;
         this.onElementClick = params.onElementClick;
         this.onCompareClick = params.onCompareClick;
+        this.rowTemplate = this.listType === 'change' ? 'rowTemplateChange' 
+            : 'rowTemplateDefault';
 
         this.columns = this.setupColumns();
         this.lastSortedColumn = false;

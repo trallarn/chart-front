@@ -1,0 +1,20 @@
+<tr class="instrument-list-el" data-bind="click: $parent.onElementClick, css: { 'active' : active, 'compared' : compared, 'benchmark' : $data.extra.change.isBenchmark }">
+    <td class="instrument-table-body-row" data-bind="text: $index"></td>
+    <td class="instrument-table-body-row" data-bind="text: name"></td>
+    <td class="instrument-table-body-row" data-bind="text: symbol"></td>
+
+    <!-- ko if: $data.extra.error -->
+    <td class="instrument-table-body-row" data-bind="text: extra.error"></td>
+    <!-- /ko -->
+    <!-- ko if: !$data.extra.error -->
+
+    <td class="instrument-table-body-row" data-bind="text: extra.change.change"></td>
+    <td class="instrument-table-body-row" data-bind="text: extra.change.fromQuote.close"></td>
+    <td class="instrument-table-body-row" data-bind="text: extra.change.toQuote.close"></td>
+
+    <!-- /ko -->
+
+
+    <td class="instrument-table-body-row" data-bind="click: $parent.onCompareClick, clickBubble: false, ">Comp</td>
+</tr>
+

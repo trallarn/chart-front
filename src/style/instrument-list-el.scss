@@ -1,5 +1,9 @@
 .instrument-list-el {
 
+    &.benchmark {
+        background-color: #f3ff43;
+    }
+
     &.active {
         background-color: #ccc;
     }
