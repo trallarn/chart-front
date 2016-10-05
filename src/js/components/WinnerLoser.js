@@ -1,6 +1,8 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
+var PubSub = require('pubsub-js');
+
 var stateRW = require('../infrastructure/StateRW');
 
 ko.components.register('winnerLoser', {
@@ -43,6 +45,9 @@ ko.components.register('winnerLoser', {
 
             self.lists()[0].url(url);
             self.lists()[0].name(self.selectedIndex());
+
+            // Notify chart about range
+            PubSub.publish('chart/setXRange', { from: fromDate, to: toDate } );
 
             self.saveState();
         };

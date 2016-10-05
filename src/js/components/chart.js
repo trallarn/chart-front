@@ -2,6 +2,7 @@ var Highcharts = require('highcharts/highstock');
 var $ = require('jquery');
 var ko = require('knockout');
 var _ = require('underscore');
+var PubSub = require('pubsub-js');
 
 ko.components.register('chart', {
 
@@ -173,6 +174,15 @@ ko.components.register('chart', {
             this.updateChartWithMainSeries(params.chartedInstrument().symbol, true);
         };
 
+        /**
+         * Sets the x-axis range.
+         */
+        this.setXRange = function(msg, data) {
+            var xAxises = self.chart.xAxis;
+            var redraw = true;
+            xAxises[0].setExtremes(data.from.getTime(), data.to.getTime(), redraw);
+        };
+
         if(!params.chartedInstrument) {
             throw 'Must supply chartedInstrument';
         }
@@ -188,6 +198,8 @@ ko.components.register('chart', {
         params.comparedInstruments.subscribe(function(){
             this.updateChartWithComparedSeries(params.comparedInstruments());
         }.bind(this));
+
+        PubSub.subscribe('chart/setXRange', this.setXRange);
 
         this.createChart();
 
