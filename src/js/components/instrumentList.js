@@ -62,7 +62,9 @@ ko.components.register('instrumentList', {
 
             // Inactivate old instrument
             if(self.oldChartedInstrument()) {
-                self.oldChartedInstrument().active(false);
+                if(self.oldChartedInstrument().active) {
+                    self.oldChartedInstrument().active(false);
+                }
             }
 
             self.oldChartedInstrument(self.chartedInstrument());

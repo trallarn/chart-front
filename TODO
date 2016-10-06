@@ -1,4 +1,5 @@
 TODO
+fix candlestick changing color to green when zooming in
 
 DONE
 update chart timespan when setting to/from-dates in WinnerLoser-view
