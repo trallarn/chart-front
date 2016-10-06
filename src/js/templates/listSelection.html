@@ -1,19 +1,21 @@
 <div class="list-selection-component" >
 
-    <div data-bind="visible: currentMenuItem() === 'Instruments', component: {
+    <div data-bind="visible: isInstrumentsVisible(), component: {
         name: 'instrumentListsInstruments',
         params: {
             chartedInstrument: chartAndList.chartedInstrument,
-            comparedInstruments: chartAndList.comparedInstruments
+            comparedInstruments: chartAndList.comparedInstruments,
+            isActive: isInstrumentsVisible
         }}">
     </div>
 
 
-    <div data-bind="visible: currentMenuItem() === 'WinnerLoser', component: {
+    <div data-bind="visible: isWinnerLoserVisible(), component: {
         name: 'winnerLoser',
         params: {
             chartedInstrument: chartAndList.chartedInstrument,
-            comparedInstruments: chartAndList.comparedInstruments
+            comparedInstruments: chartAndList.comparedInstruments,
+            isActive: isWinnerLoserVisible
         }}">
     </div>
 

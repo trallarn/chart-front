@@ -46,8 +46,11 @@ ko.components.register('winnerLoser', {
             self.lists()[0].url(url);
             self.lists()[0].name(self.selectedIndex());
 
-            // Notify chart about range
-            PubSub.publish('chart/setXRange', { from: fromDate, to: toDate } );
+            // Notify chart about range if active
+            if(self.isActive()) {
+                PubSub.publish('chart/setXRange', { from: fromDate, to: toDate } );
+            }
+
 
             self.saveState();
         };
@@ -94,6 +97,7 @@ ko.components.register('winnerLoser', {
         self.feedback = ko.observable();
         self.chartedInstrument = params.chartedInstrument;
         self.comparedInstruments = params.comparedInstruments;
+        self.isActive = params.isActive;
 
         self.from = ko.observable();
         self.to = ko.observable();
