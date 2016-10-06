@@ -22,7 +22,30 @@ ko.components.register('chart', {
         this.createChart = function() {
             self.chart = Highcharts.StockChart('chart',  {
                 rangeSelector : {
-                    selected : 4
+                    selected : 4,
+                    buttons: [{
+                        type: 'month',
+                        count: 1,
+                        text: '1m'
+                    }, {
+                        type: 'month',
+                        count: 3,
+                        text: '3m'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6m'
+                    }, {
+                        type: 'ytd',
+                        text: 'YTD'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1y'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
                 },
                 title : {
                 },
@@ -38,9 +61,6 @@ ko.components.register('chart', {
                     type: 'candlestick',
                     turboThreshold: 0,
                     id: 'main',
-                    tooltip: {
-                        valueDecimals: 2
-                    },
                     dataGrouping: {
                         units: [
                             [
@@ -77,7 +97,7 @@ ko.components.register('chart', {
 
                 self.addYValue(data);
 
-                self.getMainSerie().setData(data.quotes);
+                self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
 
                 self.chart.setTitle(data.symbol + ' Stock Price');
