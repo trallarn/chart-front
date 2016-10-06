@@ -50,10 +50,6 @@ ko.components.register('chart', {
                 title: {
                     text: ''
                 },
-                plotOptions: {
-                    series: {
-                    }
-                },
                 tooltip: {
                     //pointFormat: require('../templates/highchartPointFormat.html'),
                     xDateFormat: '%Y-%m-%d',
