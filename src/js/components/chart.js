@@ -4,11 +4,15 @@ var ko = require('knockout');
 var _ = require('underscore');
 var PubSub = require('pubsub-js');
 
+var stateRW = require('../infrastructure/StateRW');
+
 ko.components.register('chart', {
 
     viewModel: function(params) {
 
         self = this;
+
+        this.stateId = 'chart';
 
         this.dailyQuotesUrl = 'http://localhost:3000/daily/{symbol}?chartType=ohlc&callback=?';
 
@@ -198,6 +202,22 @@ ko.components.register('chart', {
             xAxises[0].setExtremes(data.from.getTime(), data.to.getTime(), redraw);
         };
 
+        self.saveState = function() {
+            stateRW.save(self.stateId, {
+                main: self.chartedInstrument().symbol
+            });
+        };
+
+        self.loadState = function() {
+            var state = stateRW.read(self.stateId);
+            
+            if(state) {
+                self.chartedInstrument( {
+                    symbol: state.main
+                });
+            }
+        };
+
         if(!params.chartedInstrument) {
             throw 'Must supply chartedInstrument';
         }
@@ -206,17 +226,22 @@ ko.components.register('chart', {
             throw 'Must supply comparedInstrument';
         }
 
-        params.chartedInstrument.subscribe(function(val){
-            this.updateChartWithMainSeries(val.symbol);
-        }.bind(this));
+        self.chartedInstrument = params.chartedInstrument;
+        self.comparedInstruments = params.comparedInstruments;
 
-        params.comparedInstruments.subscribe(function(){
-            this.updateChartWithComparedSeries(params.comparedInstruments());
-        }.bind(this));
+        self.chartedInstrument.subscribe(function(val){
+            self.updateChartWithMainSeries(val.symbol);
+            self.saveState();
+        });
+
+        self.comparedInstruments.subscribe(function(){
+            self.updateChartWithComparedSeries(params.comparedInstruments());
+        });
 
         PubSub.subscribe('chart/setXRange', this.setXRange);
 
         this.createChart();
+        this.loadState();
 
     },
     template: require('../templates/chart.html')

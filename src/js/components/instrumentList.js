@@ -32,6 +32,43 @@ ko.components.register('instrumentList', {
         this.chartedInstrument = params.chartedInstrument;
         this.comparedInstruments = params.comparedInstruments;
         this.showErrorList = params.showErrorList;
+        this.oldChartedInstrument = ko.observable();
+
+
+        this.onChartedInstrumentChange = function() {
+            if(!self.chartedInstrument()) {
+                return;
+            }
+
+            if(self.chartedInstrument() === self.oldChartedInstrument()) {
+                return;
+            }
+
+            if(!self.chartedInstrument().active) {
+                var instrument = _.find(self.list(), function(instrument) {
+                    return instrument.symbol === self.chartedInstrument().symbol;
+                });
+
+                if(instrument) {
+                    self.chartedInstrument(instrument);
+                    //Recurse
+                    return;
+                }
+            }
+
+            if(self.chartedInstrument().active) {
+                self.chartedInstrument().active(true);
+            } 
+
+            // Inactivate old instrument
+            if(self.oldChartedInstrument()) {
+                self.oldChartedInstrument().active(false);
+            }
+
+            self.oldChartedInstrument(self.chartedInstrument());
+        };
+
+        this.chartedInstrument.subscribe(this.onChartedInstrumentChange);
 
         this.fetchData = function(url, list, errorList) {
 
@@ -56,7 +93,7 @@ ko.components.register('instrumentList', {
 
                 list(includedModels);
                 errorList(excludedModels);
-                self.onElementClick(_.first(list()));
+                self.onChartedInstrumentChange();
             })
             .fail(function(){
                 console.log('Failed getting list');
@@ -69,12 +106,6 @@ ko.components.register('instrumentList', {
         };
 
         this.onElementClick = function(el) {
-            if(self.chartedInstrument()) {
-                self.chartedInstrument().active(false);
-            }
-
-            console.log('setting charted instrument to: ' + JSON.stringify(el));
-            el.active(true);
             self.chartedInstrument(el);
         };
 
