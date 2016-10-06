@@ -47,7 +47,8 @@ ko.components.register('chart', {
                         text: 'All'
                     }]
                 },
-                title : {
+                title: {
+                    text: ''
                 },
                 plotOptions: {
                     series: {
@@ -105,7 +106,7 @@ ko.components.register('chart', {
                 self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
 
-                self.chart.setTitle(data.symbol + ' Stock Price');
+                self.chart.setTitle( { text: data.symbol + ' Stock Price' } );
 
                 self.chart.redraw();
 
