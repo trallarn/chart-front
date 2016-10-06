@@ -4,73 +4,42 @@ var ko = require('knockout');
 
 ko.components.register('instrumentList', {
     viewModel: function(params) {
-        if(!params.name) {
-            throw 'must supply name';
-        }
-        if(!params.url) {
-            throw 'must supply url';
-        }
 
-        var self = this;
-
-        this.isFolded = ko.observable(false);
-
-        this.name = params.name;
-
-        this.errorName = ko.observable('');
-
-        if(typeof this.name === 'function') {
-            this.name.subscribe(function(val) {
-                self.errorName(val + ' (in error)');
-            });
-        } else {
-            self.errorName(this.name + ' (in error)');
-        }
-
-        this.url = params.url;
-        this.listType = params.listType;
-        this.chartedInstrument = params.chartedInstrument;
-        this.comparedInstruments = params.comparedInstruments;
-        this.showErrorList = params.showErrorList;
-        this.oldChartedInstrument = ko.observable();
-
-
-        this.onChartedInstrumentChange = function() {
+        this.updateSelectedInstrument = function() {
             if(!self.chartedInstrument()) {
                 return;
             }
 
-            if(self.chartedInstrument() === self.oldChartedInstrument()) {
-                return;
+            var instrument = self.findInstrumentInList(self.chartedInstrument());
+
+            if(!instrument) {
+                self.selectInstrument(false);
+            } else if(self.selectedInstrument() === instrument) {
+                // do nothing
+            } else {
+                self.selectInstrument(instrument);
             }
 
-            if(!self.chartedInstrument().active) {
-                var instrument = _.find(self.list(), function(instrument) {
-                    return instrument.symbol === self.chartedInstrument().symbol;
-                });
-
-                if(instrument) {
-                    self.chartedInstrument(instrument);
-                    //Recurse
-                    return;
-                }
-            }
-
-            if(self.chartedInstrument().active) {
-                self.chartedInstrument().active(true);
-            } 
-
-            // Inactivate old instrument
-            if(self.oldChartedInstrument()) {
-                if(self.oldChartedInstrument().active) {
-                    self.oldChartedInstrument().active(false);
-                }
-            }
-
-            self.oldChartedInstrument(self.chartedInstrument());
         };
 
-        this.chartedInstrument.subscribe(this.onChartedInstrumentChange);
+        this.selectInstrument = function(instrument) {
+            if(self.selectedInstrument()) {
+                self.selectedInstrument().active(false);
+            }
+
+            self.selectedInstrument(instrument);
+
+            if(instrument) {
+                instrument.active(true);
+            }
+
+        };
+
+        this.findInstrumentInList = function(instrument) {
+            return _.find(self.list(), function(el) {
+                return el.symbol === instrument.symbol;
+            });
+        };
 
         this.fetchData = function(url, list, errorList) {
 
@@ -95,7 +64,7 @@ ko.components.register('instrumentList', {
 
                 list(includedModels);
                 errorList(excludedModels);
-                self.onChartedInstrumentChange();
+                self.updateSelectedInstrument();
             })
             .fail(function(){
                 console.log('Failed getting list');
@@ -121,10 +90,37 @@ ko.components.register('instrumentList', {
             }
         };
 
+        if(!params.name) {
+            throw 'must supply name';
+        }
+        if(!params.url) {
+            throw 'must supply url';
+        }
+
         var self = this;
+
+        this.name = params.name;
+        this.url = params.url;
+        this.listType = params.listType;
+        this.chartedInstrument = params.chartedInstrument;
+        this.comparedInstruments = params.comparedInstruments;
+        this.showErrorList = params.showErrorList;
 
         this.list = ko.observableArray();
         this.errorList = ko.observableArray();
+        this.isFolded = ko.observable(false);
+        this.errorName = ko.observable('');
+        this.selectedInstrument = ko.observable();
+
+        this.chartedInstrument.subscribe(this.updateSelectedInstrument);
+
+        if(typeof this.name === 'function') {
+            this.name.subscribe(function(val) {
+                self.errorName(val + ' (in error)');
+            });
+        } else {
+            self.errorName(this.name + ' (in error)');
+        }
 
         if(typeof self.url === 'function') {
             self.fetchData(self.url(), self.list, self.errorList);
