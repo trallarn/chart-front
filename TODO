@@ -1,7 +1,7 @@
 TODO
-fix candlestick changing color to green when zooming in
 
 DONE
+fix candlestick changing color to green when zooming in
 update chart timespan when setting to/from-dates in WinnerLoser-view
 highlight indices in winner loser list so they stand out
 ad count to tables
