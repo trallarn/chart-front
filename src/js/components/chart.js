@@ -36,6 +36,21 @@ ko.components.register('chart', {
                     id: 'main',
                     tooltip: {
                         valueDecimals: 2
+                    },
+                    dataGrouping: {
+                        units: [
+                            [
+                                'day', // unit name
+                                [1] // allowed multiples
+                            ], 
+                            [
+                                'week', // unit name
+                                [1] // allowed multiples
+                            ], [
+                                'month',
+                                [1, 2, 3, 4, 6]
+                            ]
+                        ]
                     }
                 }]
             });
