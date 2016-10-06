@@ -54,12 +54,13 @@ ko.components.register('chart', {
                     }
                 },
                 tooltip: {
-                    pointFormat: require('../templates/highchartPointFormat.html'),
+                    //pointFormat: require('../templates/highchartPointFormat.html'),
+                    xDateFormat: '%Y-%m-%d',
                     valueDecimals: 2
                 },
                 series : [{
                     type: 'candlestick',
-                    turboThreshold: 0,
+                    //turboThreshold: 0,
                     id: 'main',
                     dataGrouping: {
                         units: [
@@ -74,7 +75,12 @@ ko.components.register('chart', {
                                 'month',
                                 [1, 2, 3, 4, 6]
                             ]
-                        ]
+                        ],
+                        dateTimeLabelFormats: {
+                           day: ['%Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
+                           week: ['Week @ %Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
+                           month: ['%B %Y', '%B', '-%B %Y']
+                        }
                     }
                 }]
             });
@@ -95,7 +101,6 @@ ko.components.register('chart', {
 
             $.getJSON(url, function (data) {
 
-                self.addYValue(data);
 
                 self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
@@ -116,14 +121,13 @@ ko.components.register('chart', {
          */
         this.addComparisonData = function(datas) {
             var comparedSeries = _.map(datas, function(data) {
-                self.addYValue(data);
 
                 return {
                     type: 'line',
                     //type: 'ohlc',
                     id: self.toComparisonId(data.symbol),
                     name: data.symbol,
-                    turboThreshold: 0,
+                    //turboThreshold: 0,
                     data : data.quotes,
                     tooltip: {
                         valueDecimals: 2
@@ -135,12 +139,6 @@ ko.components.register('chart', {
                 var s = self.chart.addSeries(series);
             });
 
-        };
-
-        this.addYValue = function(data) {
-            _.each(data.quotes, function(quote) { 
-                quote.y = quote.close;
-            });
         };
 
         this.updateChartWithComparedSeries = function(instruments) {
@@ -180,8 +178,18 @@ ko.components.register('chart', {
             }
         };
 
+        /**
+         * Updates the main series, keeps properties like 'name'.
+         */
+        this.updateMainSerie = function(options) {
+            var mainSerie = self.getMainSerie();
+
+            options = _.extend({ name: mainSerie.name }, options);
+            mainSerie.update(options);
+        };
+
         this.setCompareChart = function() {
-            self.getMainSerie().update({ type: 'line' });
+            self.updateMainSerie({ type: 'line' });
 
             var y = self.chart.yAxis[0];
             y.setCompare('percent');
@@ -196,7 +204,7 @@ ko.components.register('chart', {
         };
 
         this.setNoCompareChart = function() {
-            self.getMainSerie().update({type: 'candlestick'});
+            self.updateMainSerie({ type: 'candlestick' });
 
             var y = self.chart.yAxis[0];
             y.setCompare();
