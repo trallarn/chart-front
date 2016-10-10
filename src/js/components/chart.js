@@ -146,7 +146,11 @@ ko.components.register('chart', {
             var count = 0;
             var datas = [];
 
-            _.each(instruments, function(instrument) {
+            var toAdd = _.reject(instruments, function(instrument) {
+                return self.chart.get(self.toComparisonId(instrument.symbol));
+            });
+
+            _.each(toAdd, function(instrument) {
                 var url = this.dailyQuotesUrl
                     .replace('{symbol}', instrument.symbol);
 
@@ -154,7 +158,7 @@ ko.components.register('chart', {
                     datas.push(data);
                     count++;
 
-                    if(count === instruments.length) {
+                    if(count === toAdd.length) {
                         this.addComparisonData(datas);
                         self.setCompareChart();
                     }
