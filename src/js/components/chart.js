@@ -21,6 +21,9 @@ ko.components.register('chart', {
          */
         this.createChart = function() {
             self.chart = Highcharts.StockChart('chart',  {
+                yAxis: {
+                    type: 'linear'
+                },
                 rangeSelector : {
                     selected : 4,
                     buttons: [{
@@ -241,6 +244,16 @@ ko.components.register('chart', {
                     symbol: state.main
                 });
             }
+        };
+
+        self.setLinearScale = function() {
+            var yAxis = self.chart.yAxis[0];
+            yAxis.update({ type: 'linear' });
+        };
+
+        self.setLogarithmicScale = function() {
+            var yAxis = self.chart.yAxis[0];
+            yAxis.update({ type: 'logarithmic' });
         };
 
         if(!params.chartedInstrument) {
