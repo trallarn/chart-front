@@ -29,7 +29,7 @@ ko.components.register('winnerLoser', {
 
         self.updateList = function() {
             var fromDate = new Date(self.from());
-            var toDate = new Date(self.to());
+            var toDate = self.to() ? new Date(self.to()) : new Date(); // Defaults to today
 
             if(isNaN(fromDate.getDate())) {
                 self.feedback('Invalid date');
