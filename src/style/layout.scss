@@ -14,3 +14,16 @@ h1 {
 
 .chart-and-list-container {
 }
+
+.top-menu {
+    @extend .pointer-on-hover;
+}
+
+.folded-height {
+    height: 0;
+    overflow: hidden;
+}
+
+.nodisplay {
+    display: none;
+}

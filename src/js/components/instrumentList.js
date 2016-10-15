@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
+var PubSub = require('pubsub-js');
 
 ko.components.register('instrumentList', {
     viewModel: function(params) {
@@ -88,6 +89,10 @@ ko.components.register('instrumentList', {
                 self.comparedInstruments.push(el);
                 el.compared(true);
             }
+        };
+
+        this.onAddToFavoriteClick = function(el) {
+            PubSub.publish('favorites/saveInstruments', [ el ] );
         };
 
         if(!params.name) {

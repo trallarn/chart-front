@@ -7,6 +7,17 @@
 
 <body>
 
+    <div data-bind="component: 'notification'"></div>
+
+    <div class="floating-components-container" >
+        <div data-bind="component: 'favorites'">
+        </div>
+    </div>
+
+    <div class="top-menu" >
+        <div data-bind="component: 'favoritesButton'" ></div>
+    </div>
+
     <div class="chart-and-list-container" data-bind="component: {
         name: 'chartAndList',
         params: {}

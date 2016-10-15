@@ -8,14 +8,6 @@ ko.components.register('instrumentTable', {
             throw 'must supply list';
         }
 
-        if(!params.onElementClick ) {
-            throw 'must supply onElementClick ';
-        }
-
-        if(!params.onCompareClick) {
-            throw 'must supply onCompareClick';
-        }
-
         var self = this;
 
         this.setupColumns = function() {
@@ -91,6 +83,7 @@ ko.components.register('instrumentTable', {
         this.listType = params.listType;
         this.onElementClick = params.onElementClick;
         this.onCompareClick = params.onCompareClick;
+        this.onAddToFavoriteClick = params.onAddToFavoriteClick ;
         this.rowTemplate = this.listType === 'change' ? 'rowTemplateChange' 
             : 'rowTemplateDefault';
 

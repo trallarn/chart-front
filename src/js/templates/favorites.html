@@ -1,0 +1,10 @@
+<div class="favorites" data-bind="css: { 'nodisplay': isFolded } ">
+    <h3>Favorites</h3>
+
+    <div class="favorites__group" data-bind="template: {
+        name: 'favoritesGroup',
+        foreach: groups()
+    }">
+    </div>
+
+</div>

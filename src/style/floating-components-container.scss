@@ -1,0 +1,11 @@
+.floating-components-container {
+    position: absolute;
+    top: 15px;
+    z-index: 2;
+    background-color: white;
+
+}
+.floating-components-container-item {
+    border: solid 1px grey;
+    padding: 10px;
+}

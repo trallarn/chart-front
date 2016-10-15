@@ -1,0 +1,9 @@
+.favorites {
+
+}
+
+.floating-components-container {
+    .favorites {
+        @extend .floating-components-container-item;
+    }
+}
