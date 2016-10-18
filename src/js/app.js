@@ -18,6 +18,7 @@ $(document).ready(function() {
         };
 
         var templateContainer = $('.ko-templates-container');
+        templateContainer.append(toKOTemplate('topMenu', require('./templates/topMenu.html')));
         templateContainer.append(toKOTemplate('rowTemplateFavorite', require('./templates/rowTemplateFavorite.html')));
         templateContainer.append(toKOTemplate('rowTemplateChange', require('./templates/rowTemplateChange.html')));
         templateContainer.append(toKOTemplate('rowTemplateDefault', require('./templates/rowTemplateDefault.html')));
