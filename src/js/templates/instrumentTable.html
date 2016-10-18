@@ -1,13 +1,13 @@
 <table class="instrument-table" >
     <thead >
-        <tr data-bind="foreach: columns" >
+        <tr data-bind="foreach: tableSpec.columns" >
             <th class="instrument-table-header pointer-on-hover" data-bind="
                 click: $parent.sort.bind($parent, $data), text: name "  >
             </th>
         </tr>
     </thead>
     <tbody data-bind="template: {
-        name: rowTemplate,
+        name: tableSpec.rowTemplate,
         foreach: list()
     }">
     </tbody>

@@ -3,6 +3,8 @@ var _ = require('underscore');
 var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
+var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
+
 ko.components.register('instrumentList', {
     viewModel: function(params) {
 
@@ -121,6 +123,7 @@ ko.components.register('instrumentList', {
         this.actions.onCompareClick = self.onCompareClick.bind(this) ;
         this.actions.onAddToFavoriteClick = self.onAddToFavoriteClick.bind(this) ;
 
+        this.tableSpec = params.tableSpec;
         this.name = params.name;
         this.url = params.url;
         this.onFoldChange = params.onFoldChange;

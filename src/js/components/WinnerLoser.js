@@ -3,6 +3,7 @@ var _ = require('underscore');
 var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
+var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
 var stateRW = require('../infrastructure/StateRW');
 
 ko.components.register('winnerLoser', {
@@ -22,7 +23,7 @@ ko.components.register('winnerLoser', {
             {
                 name: ko.observable(''),
                 url:  ko.observable(),
-                listType: 'change',
+                tableSpec: InstrumentTableSpec.changeSpec(),
                 showErrorList: true
             }
         ]);

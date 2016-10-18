@@ -2,6 +2,8 @@ var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
 
+var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
+
 ko.components.register('instrumentTable', {
     viewModel: function(params) {
         if(!params.list) {
@@ -10,82 +12,10 @@ ko.components.register('instrumentTable', {
 
         var self = this;
 
-        this.setupColumns = function() {
-            var columns = [
-                {
-                    name: '',
-                    sorted:0,
-                    order: 0
-                },
-                {
-                    name: 'Name',
-                    prop: 'name',
-                    sorted:0,
-                    order: 0
-                },
-                {
-                    name: 'Symbol',
-                    prop: 'symbol',
-                    sorted:0,
-                    order: 10
-                },
-                {
-                    name: 'Actions',
-                    prop: 'actions',
-                    sorted:0,
-                    order: 20
-                }
-            ];
-
-            if(this.listType === 'change') {
-                columns = columns.concat([
-                    {
-                        name: 'Change [%]',
-                        getVal: function(row) { return row.extra.change.change; },
-                        sorted:0,
-                        order: 13
-                    },
-                    {
-                        name: 'From',
-                        getVal: function(row) { return row.extra.change.fromQuote.close; },
-                        sorted:0,
-                        order: 14
-                    },
-                    {
-                        name: 'To',
-                        getVal: function(row) { return row.extra.change.toQuote.close; },
-                        sorted:0,
-                        order: 15
-                    }
-                ]);
-
-            } else if(this.listType === 'error') {
-                columns = columns.concat([
-                    {
-                        name: 'Error',
-                        getVal: function(row) { return row.extra.error; },
-                        sorted:0,
-                        order: 11
-                    }
-                ]);
-            };
-
-
-            columns.sort(function(el1, el2) {
-                return el1.order === el2.order ? 0 : el1.order > el2.order;
-            });
-
-            return columns;
-
-        };
-
+        this.tableSpec = params.tableSpec || InstrumentTableSpec.defaultSpec();
         this.actions = params.actions || {};
         this.list = params.list;
-        this.listType = params.listType;
-        this.rowTemplate = this.listType === 'change' ? 'rowTemplateChange' 
-            : this.listType === 'favorite' ? 'rowTemplateFavorite' : 'rowTemplateDefault';
 
-        this.columns = this.setupColumns();
         this.lastSortedColumn = false;
 
         this.sort = function(column) {

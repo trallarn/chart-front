@@ -2,6 +2,8 @@ var $ = require('jquery');
 var ko = require('knockout');
 var _ = require('underscore');
 
+var InstrumentTableSpec = require('./vm/InstrumentTableSpec.js');
+
 /**
  * Applies knockout bindings.
  */
@@ -25,6 +27,7 @@ $(document).ready(function() {
     setupKOTemplates();
 
     var root = {
+        InstrumentTableSpec: InstrumentTableSpec,
         chartedInstrument: ko.observable(),
         comparedInstruments: ko.observableArray()
     };

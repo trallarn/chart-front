@@ -8,6 +8,7 @@
             params: {
                 list: list,
                 listType: $data.listType,
+                tableSpec: $data.tableSpec,
                 actions: actions
             }
         }" >
@@ -21,7 +22,7 @@
             name: 'instrumentTable',
             params: {
                 list: errorList,
-                listType: 'error'
+                tableSpec: $root.InstrumentTableSpec.errorSpec()
             }
         }" >
     </div>
