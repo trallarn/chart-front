@@ -34,10 +34,19 @@ function FavoritesGroup(params) {
         }
     };
 
+    self.onRemoveFromFavoriteClick = function(el) {
+        self.list(_.reject(self.list(), function(instrument) { 
+            return instrument.symbol === el.symbol; 
+        }));
+    };
+
     self.name = params.name;
-    self.isFolded = ko.observable(true);
+    self.isFolded = ko.observable();
     self.list = ko.observableArray(params.instruments);
     self.onFoldChange = params.onFoldChange;
+
+    //TODO FOr test
+    self.onFold(false);
 }
 
 ko.components.register('favoritesGroup', {

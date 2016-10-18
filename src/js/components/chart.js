@@ -10,7 +10,7 @@ ko.components.register('chart', {
 
     viewModel: function(params) {
 
-        self = this;
+        var self = this;
 
         this.stateId = 'chart';
 

@@ -116,6 +116,7 @@ ko.components.register('instrumentList', {
 
         var self = this;
 
+        this.actions = params.actions || {};
         this.name = params.name;
         this.url = params.url;
         this.onFoldChange = params.onFoldChange;

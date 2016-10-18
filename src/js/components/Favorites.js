@@ -30,6 +30,11 @@ ko.components.register('favorites', {
             }
         };
 
+        // Todo: read favorites from state?
+        self.currentGroup = ko.observable();
+
+        self.isFolded = ko.observable(false);
+
         self.groups = ko.observableArray(
             [
                 new FavoritesGroup({
@@ -39,11 +44,6 @@ ko.components.register('favorites', {
                 }) 
             ]
         );
-
-        // Todo: read favorites from state?
-        self.currentGroup = ko.observable();
-
-        self.isFolded = ko.observable(false);
 
         PubSub.subscribe('favorites/saveInstruments', self.saveInstruments);
         PubSub.subscribe('favorites/toggleFold', self.toggleFold);
