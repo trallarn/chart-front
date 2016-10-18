@@ -9,8 +9,6 @@ ko.components.register('chartAndList', {
         var self = this;
         this.stateId = 'chartAndList';
 
-        this.chartedInstrument = ko.observable();
-        this.comparedInstruments = ko.observableArray();
         this.currentMenuItem = ko.observable();
 
         this.currentMenuItem.subscribe(function() {

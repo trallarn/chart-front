@@ -26,7 +26,9 @@ function FavoritesGroup(params) {
         self.onFold();
     };
 
-    self.onFold = function() {
+    self.onFold = function(isFolded) {
+        self.isFolded(isFolded);
+
         if(self.onFoldChange) {
             self.onFoldChange(self, self.isFolded());
         }

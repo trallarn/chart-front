@@ -23,5 +23,10 @@ $(document).ready(function() {
 
     setupKOTemplates();
 
-    ko.applyBindings();
+    var root = {
+        chartedInstrument: ko.observable(),
+        comparedInstruments: ko.observableArray()
+    };
+
+    ko.applyBindings(root);
 });

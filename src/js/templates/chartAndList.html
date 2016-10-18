@@ -3,8 +3,8 @@
     <div class="chart-and-list__chart" data-bind="component: {
         name: 'chart',
         params: {
-            chartedInstrument: chartedInstrument,
-            comparedInstruments: comparedInstruments
+            chartedInstrument: $root.chartedInstrument,
+            comparedInstruments: $root.comparedInstruments
         }}">
     </div>
 
@@ -23,7 +23,7 @@
             <!-- ko component: {
                 name: 'listSelection',
                 params: {
-                    chartAndList: $data
+                    currentMenuItem: currentMenuItem
                 }
             } -->
             <!-- /ko -->

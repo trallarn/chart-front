@@ -3,8 +3,8 @@
     <div data-bind="visible: isInstrumentsVisible(), component: {
         name: 'instrumentListsInstruments',
         params: {
-            chartedInstrument: chartAndList.chartedInstrument,
-            comparedInstruments: chartAndList.comparedInstruments,
+            chartedInstrument: $root.chartedInstrument,
+            comparedInstruments: $root.comparedInstruments,
             isActive: isInstrumentsVisible
         }}">
     </div>
@@ -13,8 +13,8 @@
     <div data-bind="visible: isWinnerLoserVisible(), component: {
         name: 'winnerLoser',
         params: {
-            chartedInstrument: chartAndList.chartedInstrument,
-            comparedInstruments: chartAndList.comparedInstruments,
+            chartedInstrument: $root.chartedInstrument,
+            comparedInstruments: $root.comparedInstruments,
             isActive: isWinnerLoserVisible
         }}">
     </div>

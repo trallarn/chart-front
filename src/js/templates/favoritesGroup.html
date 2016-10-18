@@ -1,12 +1,18 @@
 <div class="favorites-group" >
-    <div class="pointer-on-hover" data-bind="text: name, click: toggleFold" ></div>
 
-    <div class="favorites-group-table" data-bind="css: { 'folded-height': isFolded },
+    <div class="favorites-group-table" data-bind="
         component: {
-            name: 'instrumentTable',
+            name: 'instrumentList',
             params: {
+                extraClass: 'instrument-list--tight',
+                name: name,
+                showErrorList: false,
+                onFoldChange: onFold,
+                isFolded: isFolded(),
                 list: list,
-                listType: 'favorite'
+                listType: 'favorite',
+                chartedInstrument: $root.chartedInstrument,
+                comparedInstruments: $root.comparedInstruments
             }
         }" >
     </div>

@@ -75,6 +75,10 @@ ko.components.register('instrumentList', {
 
         this.toggleTableFold = function() {
             self.isFolded(!self.isFolded());
+
+            if(self.onFoldChange) {
+                self.onFoldChange(self.isFolded());
+            }
         };
 
         this.onElementClick = function(el) {
@@ -95,25 +99,35 @@ ko.components.register('instrumentList', {
             PubSub.publish('favorites/saveInstruments', [ el ] );
         };
 
+        if(!params.chartedInstrument) {
+            throw 'must supply chartedInstrument';
+        }
+        if(!params.comparedInstruments) {
+            throw 'must supply comparedInstruments';
+        }
         if(!params.name) {
             throw 'must supply name';
         }
         if(!params.url) {
-            throw 'must supply url';
+            if(!params.list) {
+                throw 'must supply url or list';
+            }
         }
 
         var self = this;
 
         this.name = params.name;
         this.url = params.url;
+        this.onFoldChange = params.onFoldChange;
         this.listType = params.listType;
         this.chartedInstrument = params.chartedInstrument;
         this.comparedInstruments = params.comparedInstruments;
         this.showErrorList = params.showErrorList;
+        this.extraClass = params.extraClass;
 
-        this.list = ko.observableArray();
+        this.list = params.list || ko.observableArray();
         this.errorList = ko.observableArray();
-        this.isFolded = ko.observable(false);
+        this.isFolded = ko.observable(!!params.isFolded);
         this.errorName = ko.observable('');
         this.selectedInstrument = ko.observable();
 
@@ -127,13 +141,15 @@ ko.components.register('instrumentList', {
             self.errorName(this.name + ' (in error)');
         }
 
-        if(typeof self.url === 'function') {
-            self.fetchData(self.url(), self.list, self.errorList);
-            self.url.subscribe(function() {
+        if(self.url) {
+            if(typeof self.url === 'function') {
                 self.fetchData(self.url(), self.list, self.errorList);
-            });
-        } else {
-            self.fetchData(self.url, self.list, self.errorList);
+                self.url.subscribe(function() {
+                    self.fetchData(self.url(), self.list, self.errorList);
+                });
+            } else {
+                self.fetchData(self.url, self.list, self.errorList);
+            }
         }
 
     },
