@@ -13,7 +13,11 @@ function FavoritesGroup(params) {
     }
 
     self.addInstruments = function(instruments) {
-        self.list(self.list().concat(instruments));
+        var newInstruments = _.reject(instruments, function(instrument) {
+            return _.find(self.list(), self.hasSameSymbol.bind(self, instrument));
+        });
+
+        self.list(self.list().concat(newInstruments));
     };
 
     self.toggleFold = function() {
@@ -35,9 +39,11 @@ function FavoritesGroup(params) {
     };
 
     self.onRemoveFromFavoriteClick = function(el) {
-        self.list(_.reject(self.list(), function(instrument) { 
-            return instrument.symbol === el.symbol; 
-        }));
+        self.list(_.reject(self.list(), self.hasSameSymbol.bind(self, el)));
+    };
+
+    self.hasSameSymbol = function(i1, i2) {
+        return i1.symbol === i2.symbol; 
     };
 
     self.actions = {
