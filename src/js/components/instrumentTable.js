@@ -82,10 +82,6 @@ ko.components.register('instrumentTable', {
         this.actions = params.actions || {};
         this.list = params.list;
         this.listType = params.listType;
-        this.onElementClick = params.onElementClick;
-        this.onCompareClick = params.onCompareClick;
-        this.onAddToFavoriteClick = params.onAddToFavoriteClick ;
-        this.onRemoveFromFavoriteClick = params.onRemoveFromFavoriteClick ;
         this.rowTemplate = this.listType === 'change' ? 'rowTemplateChange' 
             : this.listType === 'favorite' ? 'rowTemplateFavorite' : 'rowTemplateDefault';
 

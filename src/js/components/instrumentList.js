@@ -82,15 +82,15 @@ ko.components.register('instrumentList', {
         };
 
         this.onElementClick = function(el) {
-            self.chartedInstrument(el);
+            this.chartedInstrument(el);
         };
 
         this.onCompareClick = function(el) {
-            if(self.comparedInstruments.indexOf(el) > -1) {
-                self.comparedInstruments.remove(el);
+            if(this.comparedInstruments.indexOf(el) > -1) {
+                this.comparedInstruments.remove(el);
                 el.compared(false);
             } else {
-                self.comparedInstruments.push(el);
+                this.comparedInstruments.push(el);
                 el.compared(true);
             }
         };
@@ -117,6 +117,10 @@ ko.components.register('instrumentList', {
         var self = this;
 
         this.actions = params.actions || {};
+        this.actions.onElementClick = self.onElementClick.bind(this);
+        this.actions.onCompareClick = self.onCompareClick.bind(this) ;
+        this.actions.onAddToFavoriteClick = self.onAddToFavoriteClick.bind(this) ;
+
         this.name = params.name;
         this.url = params.url;
         this.onFoldChange = params.onFoldChange;

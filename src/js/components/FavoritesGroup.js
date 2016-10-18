@@ -40,6 +40,10 @@ function FavoritesGroup(params) {
         }));
     };
 
+    self.actions = {
+        onRemoveFromFavoriteClick: self.onRemoveFromFavoriteClick
+    };
+
     self.name = params.name;
     self.isFolded = ko.observable();
     self.list = ko.observableArray(params.instruments);
