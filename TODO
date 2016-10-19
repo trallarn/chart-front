@@ -1,4 +1,6 @@
 TODO
+add/remove fave-groups
+fave should use state
 
 DONE
 fix candlestick changing color to green when zooming in
