@@ -13,6 +13,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "watch": "^0.18.0",
     "watchify": "^3.7.0",
     "exorcist": "^0.4.0",
     "stringify": "^5.1.0",
