@@ -1,7 +1,7 @@
 var Highcharts = require('highcharts/highstock');
 var $ = require('jquery');
 
-var settings = require('../infrastructure/settings');
+var settings = require('./infrastructure/settings');
 
 $(function () {
 //    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?a=e&filename=aapl-ohlc.json&callback=?', function (data) {

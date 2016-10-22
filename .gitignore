@@ -3,3 +3,4 @@ static
 
 # Vim backup files
 *.swp
+.env.js
