@@ -4,6 +4,7 @@ var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
+var settings = require('../infrastructure/settings');
 
 ko.components.register('winnerLoser', {
     viewModel: function(params) {
@@ -90,8 +91,8 @@ ko.components.register('winnerLoser', {
         self.stateId = 'WinnerLoser';
 
         //TODO: build back end for new endpoint that takes fromDate toDate
-        self.baseUrl = 'http://localhost:3000/instruments/change?index={index}&from={from}&to={to}&callback=?';
-        self.indicesUrl = 'http://localhost:3000/indices?callback=?';
+        self.baseUrl = settings.withQuoteAPIBase('/instruments/change?index={index}&from={from}&to={to}&callback=?');
+        self.indicesUrl = settings.withQuoteAPIBase('/indices?callback=?');
         self.indices = ko.observableArray();
         self.selectedIndex = ko.observable();
         self.feedback = ko.observable();

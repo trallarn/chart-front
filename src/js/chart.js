@@ -1,9 +1,11 @@
 var Highcharts = require('highcharts/highstock');
 var $ = require('jquery');
 
+var settings = require('../infrastructure/settings');
+
 $(function () {
 //    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?a=e&filename=aapl-ohlc.json&callback=?', function (data) {
-$.getJSON('http://localhost:3000/daily/^BSESN?chartType=ohlc&callback=?', function (raw) {
+$.getJSON(settings.withQuoteAPIBase('/daily/^BSESN?chartType=ohlc&callback=?'), function (raw) {
 var data = raw.quotes;
 
         // create the chart
@@ -78,33 +80,3 @@ var data = raw.quotes;
 
     });
 });
-//$.getJSON('http://localhost:3000/daily/AAK.ST?chartType=ohlc&callback=?', function (data) {
-//    Highcharts.StockChart('testchart',  {
-//        rangeSelector : {
-//            selected : 1
-//        },
-//        plotOptions: {
-//            candlestick: {
-//                lineColor: '#2f7ed8',
-//                upLineColor: 'silver', // docs
-//                upColor: 'silver'
-//            }
-//        },
-//
-//        title : {
-//            text : data.symbol + ' Stock Price'
-//        },
-//
-//        series : [{
-//            type: 'candlestick',
-//            //type: 'line',
-//            turboThreshold: 0,
-//            name : data.symbol,
-//            data : data.quotes,
-//            tooltip: {
-//                valueDecimals: 2
-//            }
-//        }]
-//    });
-//});
-

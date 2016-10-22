@@ -5,6 +5,7 @@ var _ = require('underscore');
 var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
+var settings = require('../infrastructure/settings');
 
 ko.components.register('chart', {
 
@@ -14,7 +15,7 @@ ko.components.register('chart', {
 
         this.stateId = 'chart';
 
-        this.dailyQuotesUrl = 'http://localhost:3000/daily/{symbol}?chartType=ohlc&callback=?';
+        this.dailyQuotesUrl = settings.withQuoteAPIBase('/daily/{symbol}?chartType=ohlc&callback=?');
 
         /**
          * Creates the highstock-chart without data.
