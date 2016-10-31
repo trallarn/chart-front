@@ -19,9 +19,16 @@ ko.components.register('winnerLoserSet', {
             throw 'must supply comparedInstruments ';
         }
 
-        self.buildWinnerLoser = function() {
+        self.buildWinnerLoser = function(wsState) {
             var ws = new WinnerLoser(params);
             ws.onCloseCallback = self.onWinnerLoserClose.bind(self, ws);
+
+            if(wsState) {
+                ws.loadState(wsState);
+            }
+
+            ws.onStateChangeCallback = self.saveState.bind(self);
+
             return ws;
         };
 
@@ -33,18 +40,38 @@ ko.components.register('winnerLoserSet', {
 
             if (index > -1) {
                 self.winnerLosers.splice(index, 1);
+                self.saveState();
             }
+        };
+
+        self.saveState = function() {
+            stateRW.save(self.stateId, {
+                winnerLosers: _.map(self.winnerLosers(), function(ws) { return ws.buildState(); })
+            });
         };
 
         self.createWinnerLoserClick = function() {
             self.winnerLosers.push(self.buildWinnerLoser());
         };
 
-        self.isActive = params.isActive;
+        self.loadState = function() {
+            var state = stateRW.read(self.stateId);
 
-        self.winnerLosers = ko.observableArray([
-            self.buildWinnerLoser()
-        ]);
+            if(state) {
+                _.each(state.winnerLosers, function(wsState) {
+                    self.winnerLosers.push(self.buildWinnerLoser(wsState));
+                });
+            } else {
+                self.winnerLosers.push(self.buildWinnerLoser());
+            }
+
+        };
+
+        self.stateId = 'winnerLosersSet';
+        self.isActive = params.isActive;
+        self.winnerLosers = ko.observableArray([ ]);
+
+        self.loadState();
     },
     template: require('../templates/winnerLoserSet.html')
 });

@@ -3,7 +3,6 @@ var _ = require('underscore');
 var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
-var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
 
 module.exports = WinnerLoser;
@@ -77,7 +76,6 @@ function WinnerLoser(params) {
             });
         }
 
-
         self.saveState();
     };
 
@@ -89,31 +87,43 @@ function WinnerLoser(params) {
         self.plotLineIds = [];
     };
 
-    self.saveState = function() {
-        stateRW.save(self.stateId, {
+    self.buildState = function() {
+        return {
             from: self.from(),
             to: self.to(),
             selectedIndex: self.selectedIndex()
-        });
+        };
     };
 
-    self.loadState = function() {
-        var state = stateRW.read(self.stateId);
-        
+    self.saveState = function() {
+        if(self.onStateChangeCallback) {
+            self.onStateChangeCallback();
+        };
+    };
+
+    self.loadState = function(state) {
         if(state) {
-            self.from(state.from);
-            self.to(state.to);
-            self.selectedIndex(state.selectedIndex);
-            self.updateList();
+            
+            if(self.indices().length > 0) {
+                self.from(state.from);
+                self.to(state.to);
+                self.selectedIndex(state.selectedIndex);
+                self.updateList();
+            } else {
+                self.deferredStateLoad = self.loadState.bind(self, state);
+            }
         }
     };
 
+    /**
+     * Fetches indices for the drop down and calls any deferred load state.
+     */
     self.fetchIndices = function(callback) {
         $.getJSON(self.indicesUrl, function(data) {
             self.indices(_.pluck(data, 'name'));
 
-            if(callback) { 
-                callback();
+            if(self.deferredStateLoad) {
+                self.deferredStateLoad();
             }
         })
         .fail(function(){
@@ -129,9 +139,7 @@ function WinnerLoser(params) {
         }
     };
 
-    self.stateId = 'WinnerLoser';
-
-    //TODO: build back end for new endpoint that takes fromDate toDate
+    self.deferredStateLoad = false;
     self.baseUrl = settings.withQuoteAPIBase('/instruments/change?index={index}&from={from}&to={to}&callback=?');
     self.indicesUrl = settings.withQuoteAPIBase('/indices?callback=?');
     self.indices = ko.observableArray();
@@ -147,9 +155,7 @@ function WinnerLoser(params) {
     self.plotLineIds = [];
     self.onCloseCallback = false; // Override with callback
 
-    self.fetchIndices(function() { 
-        self.loadState();
-    });
+    self.fetchIndices();
 }
 
 ko.components.register('winnerLoser', {
