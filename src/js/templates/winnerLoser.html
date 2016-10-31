@@ -1,27 +1,33 @@
-<div>
+<div class="winnerLoser" >
 
-    <h3>Date interval</h3>
+    <button class="button-top-right button-close" data-bind="click: closeClick" ></button>
 
-    <form data-bind="submit: updateList" >
-        <label for="from">From: </label>
-        <input name="from" type="text" data-bind="textInput: from" />
-        <label for="to">To: </label>
-        <input name="to" type="text" placeholder="Today" data-bind="textInput: to" />
-        <label for="index">Index: </label>
-        <select name="index" type="select" data-bind="options: indices, selectedOptions: selectedIndex" ></select>
-        <button name="update" type="submit" >Update</button>
-        <p class="feedback" data-bind="text: feedback" ></p>
-    </form>
+    <div>
 
-</div>
+        <h3>Date interval</h3>
+
+        <form data-bind="submit: updateList" >
+            <label for="from">From: </label>
+            <input name="from" type="text" data-bind="textInput: from" />
+            <label for="to">To: </label>
+            <input name="to" type="text" placeholder="Today" data-bind="textInput: to" />
+            <label for="index">Index: </label>
+            <select name="index" type="select" data-bind="options: indices, selectedOptions: selectedIndex" ></select>
+            <button name="update" type="submit" >Update</button>
+            <p class="feedback" data-bind="text: feedback" ></p>
+        </form>
+
+    </div>
 
 
-<div data-bind="component: {
-    name: 'instrumentLists',
-    params: {
-        lists: lists,
-        chartedInstrument: chartedInstrument,
-        comparedInstruments: comparedInstruments
-    }
-}">
+    <div data-bind="component: {
+        name: 'instrumentLists',
+        params: {
+            lists: lists,
+            chartedInstrument: chartedInstrument,
+            comparedInstruments: comparedInstruments
+        }
+    }">
+    </div>
+
 </div>

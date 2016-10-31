@@ -1,0 +1,11 @@
+<div class="winnerLoserSet " >
+
+    <button data-bind="click: createWinnerLoserClick" >New</button>
+
+    <div class="flex-container flex-container--row" data-bind="template: {
+        name: 'winnerLoser',
+        foreach: winnerLosers()
+    }">
+    </div>
+
+</div>

@@ -18,6 +18,7 @@ $(document).ready(function() {
         var templateContainer = $('.ko-templates-container');
         templateContainer.append(toKOTemplate('rowTemplateChange', require('./templates/rowTemplateChange.html')));
         templateContainer.append(toKOTemplate('rowTemplateDefault', require('./templates/rowTemplateDefault.html')));
+        templateContainer.append(toKOTemplate('winnerLoser', require('./templates/winnerLoser.html')));
     };
 
     setupKOTemplates();

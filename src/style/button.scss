@@ -1,0 +1,17 @@
+.button-top-right {
+    float: right;
+}
+
+.button-close {
+    font-weight: 300;
+    font-family: Arial, sans-serif;
+    border: none;
+    font-size: 24px;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+}
+.button-close:before {
+    content: '\00d7'; 
+    display: inline-block;
+}
