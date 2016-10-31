@@ -50,10 +50,42 @@ ko.components.register('winnerLoser', {
             // Notify chart about range if active
             if(self.isActive()) {
                 PubSub.publish('chart/setXRange', { from: fromDate, to: toDate } );
+
+                self.clearPlotLines();
+
+                var fromId = 'from-' + fromDate.getTime();
+                var toId = 'to-' + toDate.getTime();
+                self.plotLineIds.push(fromId);
+                self.plotLineIds.push(toId);
+
+                PubSub.publish('chart/addXPlotLine', { 
+                    label: {
+                        text: 'From'
+                    },
+                    value: fromDate, 
+                    color: 'green',
+                    id: fromId
+                });
+                PubSub.publish('chart/addXPlotLine', { 
+                    label: {
+                        text: 'To'
+                    },
+                    value: toDate, 
+                    color: 'red',
+                    id: toId
+                });
             }
 
 
             self.saveState();
+        };
+
+        self.clearPlotLines = function() {
+            _.each(self.plotLineIds, function(id) {
+                PubSub.publish('chart/removeXPlotLine', { id: id } ); 
+            });
+
+            self.plotLineIds = [];
         };
 
         self.saveState = function() {
@@ -102,6 +134,8 @@ ko.components.register('winnerLoser', {
 
         self.from = ko.observable();
         self.to = ko.observable();
+
+        self.plotLineIds = [];
 
         self.fetchIndices(function() { 
             self.loadState();
