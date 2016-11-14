@@ -50,12 +50,14 @@ function FavoritesGroup(params) {
         onRemoveFromFavoriteClick: self.onRemoveFromFavoriteClick
     };
 
+    self.selected = ko.observable(false);
     self.name = params.name;
     self.isFolded = ko.observable();
     self.list = ko.observableArray(params.instruments);
     self.onFoldChange = params.onFoldChange;
+    self.onClose = params.onClose.bind(this);
 
-    //TODO FOr test
+    //TODO For test
     self.onFold(false);
 }
 

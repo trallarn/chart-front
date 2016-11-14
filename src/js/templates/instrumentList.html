@@ -1,7 +1,5 @@
 <div class="instrument-list" data-bind="css: extraClass" >
 
-
-
     <h2 class="instrument-list__title pointer-on-hover" data-bind=" " >
         <span data-bind="
             text: name, 
@@ -9,12 +7,17 @@
             css: { nodisplay: showEditNameInput() }
         " ></span>
 
-        <input type="text" data-bind="
-            css: { nodisplay: !showEditNameInput() }, 
-            textInput: name
-        " ></input>
+        <form class="display-inline" data-bind="submit: editName" >
+            <input type="text" data-bind="
+                css: { nodisplay: !showEditNameInput() }, 
+                textInput: name
+            " ></input>
+        </form>
         <!-- ko if: supportEditName -->
             <button data-bind="click: editName" >Edit</button>
+        <!-- /ko -->
+        <!-- ko if: showCloseButton -->
+            <button class="button-close button-close--small" data-bind="click: closeClicked" ></button>
         <!-- /ko -->
     </h2>
 

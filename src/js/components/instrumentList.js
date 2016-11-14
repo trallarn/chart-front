@@ -105,6 +105,14 @@ ko.components.register('instrumentList', {
             PubSub.publish('favorites/saveInstruments', [ el ] );
         };
 
+        this.closeClicked = function() {
+            if(self.onCloseCallback) {
+                self.onCloseCallback();
+            } else {
+                console.warn('missing close callback');
+            }
+        };
+
         if(!params.chartedInstrument) {
             throw 'must supply chartedInstrument';
         }
@@ -127,7 +135,10 @@ ko.components.register('instrumentList', {
         this.actions.onCompareClick = self.onCompareClick.bind(this) ;
         this.actions.onAddToFavoriteClick = self.onAddToFavoriteClick.bind(this) ;
 
+        this.showCloseButton = params.showCloseButton;
+        this.onCloseCallback = params.onCloseCallback;
         this.showEditNameInput = ko.observable(false);
+        this.supportEditName = params.supportEditName;
         this.supportEditName = params.supportEditName;
         this.tableSpec = params.tableSpec;
         this.name = params.name;

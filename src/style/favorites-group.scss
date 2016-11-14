@@ -1,0 +1,15 @@
+.favorites-group {
+
+    .favorites-group-table {
+        margin-bottom: 5px;
+        border: 1px dashed gray;
+        border-radius: 4px;
+        padding: 5px;
+
+        &--selected {
+            background-color: #ffdddd;
+        }
+
+    }
+
+}

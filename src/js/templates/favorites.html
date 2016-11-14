@@ -1,5 +1,8 @@
 <div class="favorites" data-bind="css: { 'nodisplay': isFolded } ">
-    <h3 class="h3" >Favorites</h3>
+    <h3 class="h3" >
+        Favorites 
+        <button data-bind="click: addGroup" >Add</button>
+    </h3>
 
     <div class="favorites__group" data-bind="template: {
         name: 'favoritesGroup',

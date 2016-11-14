@@ -6,10 +6,16 @@
     font-weight: 300;
     font-family: Arial, sans-serif;
     border: none;
-    font-size: 24px;
     border-radius: 15px;
+    font-size: 24px;
     width: 30px;
     height: 30px;
+
+    &--small {
+        font-size: 14px;
+        width: 20px;
+        height: 20px;
+    }
 }
 .button-close:before {
     content: '\00d7'; 

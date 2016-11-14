@@ -1,12 +1,15 @@
 <div class="favorites-group" >
 
     <div class="favorites-group-table" data-bind="
+        css: { 'favorites-group-table--selected': selected() },
         component: {
             name: 'instrumentList',
             params: {
                 extraClass: 'instrument-list--tight',
                 name: name,
                 supportEditName: true,
+                showCloseButton: true,
+                onCloseCallback: onClose,
                 showErrorList: false,
                 onFoldChange: onFold,
                 isFolded: isFolded(),
