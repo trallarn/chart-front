@@ -38,7 +38,7 @@ ko.components.register('favorites', {
         self.groups = ko.observableArray(
             [
                 new FavoritesGroup({
-                    name: 1,
+                    name: ko.observable(1),
                     instruments: [],
                     onFoldChange: self.onGroupFoldChange
                 }) 

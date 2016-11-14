@@ -97,6 +97,10 @@ ko.components.register('instrumentList', {
             }
         };
 
+        this.editName = function() {
+            self.showEditNameInput(!self.showEditNameInput());
+        };
+
         this.onAddToFavoriteClick = function(el) {
             PubSub.publish('favorites/saveInstruments', [ el ] );
         };
@@ -123,6 +127,8 @@ ko.components.register('instrumentList', {
         this.actions.onCompareClick = self.onCompareClick.bind(this) ;
         this.actions.onAddToFavoriteClick = self.onAddToFavoriteClick.bind(this) ;
 
+        this.showEditNameInput = ko.observable(false);
+        this.supportEditName = params.supportEditName;
         this.tableSpec = params.tableSpec;
         this.name = params.name;
         this.url = params.url;
