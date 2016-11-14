@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
+var settings = require('../infrastructure/settings');
 
 ko.components.register('instrumentListsWinnerLoser', {
     viewModel: function(params) {
@@ -20,11 +21,11 @@ ko.components.register('instrumentListsWinnerLoser', {
         this.lists = ko.observableArray([
             {
                 name: 'Indices',
-                url:  'http://localhost:3000/indexComponents/Indices?callback=?'
+                url:  settings.withQuoteAPIBase('/indexComponents/Indices?callback=?')
             },
             {
                 name: 'Stockholm',
-                url:  'http://localhost:3000/indexComponents/stockholm?callback=?'
+                url:  settings.withQuoteAPIBase('/indexComponents/stockholm?callback=?')
             }
         ]);
 

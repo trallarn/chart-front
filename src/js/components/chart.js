@@ -5,6 +5,7 @@ var _ = require('underscore');
 var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
+var settings = require('../infrastructure/settings');
 
 ko.components.register('chart', {
 
@@ -14,7 +15,7 @@ ko.components.register('chart', {
 
         this.stateId = 'chart';
 
-        this.dailyQuotesUrl = 'http://localhost:3000/daily/{symbol}?chartType=ohlc&callback=?';
+        this.dailyQuotesUrl = settings.withQuoteAPIBase('/daily/{symbol}?chartType=ohlc&callback=?');
 
         /**
          * Creates the highstock-chart without data.
@@ -234,6 +235,28 @@ ko.components.register('chart', {
             xAxises[0].setExtremes(data.from.getTime(), data.to.getTime(), redraw);
         };
 
+        this.addXPlotLine = function(msg, data) {
+            var xAxises = self.chart.xAxis;
+
+            xAxises[0].addPlotLine({
+                id: data.id,
+                width: 2,
+                color: data.color || 'black',
+                label: data.label,
+                value: data.value.getTime()
+            });
+        };
+
+        this.removeXPlotLine = function(msg, data) {
+            if(!data.id) {
+                throw 'Must supply id';
+            }
+
+            var xAxises = self.chart.xAxis;
+
+            xAxises[0].removePlotLine(data.id);
+        };
+
         self.saveState = function() {
             stateRW.save(self.stateId, {
                 main: self.chartedInstrument().symbol
@@ -281,6 +304,8 @@ ko.components.register('chart', {
         });
 
         PubSub.subscribe('chart/setXRange', this.setXRange);
+        PubSub.subscribe('chart/addXPlotLine', this.addXPlotLine);
+        PubSub.subscribe('chart/removeXPlotLine', this.removeXPlotLine);
 
         this.createChart();
         this.loadState();

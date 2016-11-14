@@ -13,19 +13,26 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "browserify": "^13.1.0",
     "exorcist": "^0.4.0",
+    "node-sass": "^3.10.1",
     "stringify": "^5.1.0",
-    "tape": "^4.5.1"
+    "tape": "^4.5.1",
+    "watch": "^0.18.0",
+    "watchify": "^3.7.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build-html": "mkdir -p static/html && cp -r src/html/* static/html/",
     "watch-html": "watch 'cp -r src/html/* static/html/' src/html/ ",
-    "style-sass": "node-sass src/style/all.scss -o static/style/",
-    "watch-style-sass": "npm run style-sass && node-sass --watch  src/style/all.scss -o static/style/ ",
+    "build-style-sass": "mkdir -p static/style && node-sass src/style/all.scss -o static/style/",
+    "watch-style-sass": "npm run build-style-sass && node-sass --watch  src/style/all.scss -o static/style/ ",
+    "build-js": "mkdir -p static/js && browserify --debug -t stringify --extensions .html -e src/js/app.js src/js/**/* | exorcist static/js/bundle.js.map > static/js/bundle.js",
     "watch-js": "watchify -t stringify --extensions .html -e src/js/app.js src/js/**/* -o 'exorcist static/js/bundle.js.map > static/js/bundle.js' -d",
     "watch-testchart-js": "watchify -t stringify -e src/js/chart.js -o 'exorcist static/js/bundle-testchart.js.map > static/js/bundle-testchart.js' -d",
     "watch": "npm run watch-testchart-js & npm run watch-js & npm run watch-html & npm run watch-style-sass",
-    "start": "http-server ."
+    "build": "npm run build-js & npm run build-html & npm run build-style-sass",
+    "start": "http-server static/"
   },
   "browserify": {
     "transform": [
