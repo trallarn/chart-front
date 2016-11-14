@@ -10,7 +10,11 @@
     <div data-bind="component: 'notification'"></div>
 
     <div class="floating-components-container" >
-        <div data-bind="component: 'favorites'">
+        <div data-bind="component: {
+            name: 'favorites',
+            params: {
+                favoritesAPI: $root.favoritesAPI
+            }}">
         </div>
     </div>
 

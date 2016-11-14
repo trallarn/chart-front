@@ -6,12 +6,17 @@ var env = require('../../../.env');
  * Loads environment variables.
  */ 
 var expectedVariables = [
-    'quoteAPIBase'
+    'quoteAPIBase',
+    'favoritesAPI'
 ];
 
 var settings = {
     withQuoteAPIBase: function(suffix) {
         return this.quoteAPIBase + suffix;
+    },
+
+    withAPIBase: function(api, suffix) {
+        return this[api] + suffix;
     }
 };
 

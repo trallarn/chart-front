@@ -46,6 +46,16 @@ function FavoritesGroup(params) {
         return i1.symbol === i2.symbol; 
     };
 
+    self.toStateObj = function() {
+        return {
+            id: self.id,
+            name: self.name,
+            list: _.map(self.list(), function(instr) { 
+                return instr.symbol; 
+            })
+        };
+    };
+
     self.actions = {
         onRemoveFromFavoriteClick: self.onRemoveFromFavoriteClick
     };
