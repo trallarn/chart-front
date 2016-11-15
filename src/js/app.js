@@ -4,6 +4,7 @@ var _ = require('underscore');
 
 var InstrumentTableSpec = require('./vm/InstrumentTableSpec.js');
 var FavoritesAPI = require('./api/FavoritesAPI.js');
+var UserAPI = require('./api/UserAPI.js');
 
 /**
  * Applies knockout bindings.
@@ -30,6 +31,7 @@ $(document).ready(function() {
     setupKOTemplates();
 
     var root = {
+        userAPI: new UserAPI(),
         favoritesAPI: new FavoritesAPI(),
         InstrumentTableSpec: InstrumentTableSpec,
         chartedInstrument: ko.observable(),

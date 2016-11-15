@@ -1,4 +1,10 @@
 <div class="top-menu" >
-    <div data-bind="component: 'favoritesButton'" ></div>
+    <div class="top-menu-item" data-bind="component: 'favoritesButton'" ></div>
+    <div class="top-menu-item float-right" data-bind="component: {
+        name: 'user',
+        params: {
+            userAPI: $root.userAPI
+        }
+    }" ></div>
 </div>
 
