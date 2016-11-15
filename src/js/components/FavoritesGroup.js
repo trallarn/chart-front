@@ -8,10 +8,6 @@ var stateRW = require('../infrastructure/StateRW');
 function FavoritesGroup(params) {
     var self = this;
 
-    if(!params.name) {
-        throw 'missing name';
-    }
-
     self.addInstruments = function(instruments) {
         var newInstruments = _.reject(instruments, function(instrument) {
             return _.find(self.list(), self.hasSameSymbol.bind(self, instrument));
@@ -56,9 +52,21 @@ function FavoritesGroup(params) {
         };
     };
 
+    self.readState = function(state) {
+        self.id = state.id;
+        self.name(state.name);
+        self.list(state.list);
+    };
+
     self.actions = {
         onRemoveFromFavoriteClick: self.onRemoveFromFavoriteClick
     };
+
+    var state = params.state;
+
+    if(!state && !params.name) {
+        throw 'missing name';
+    }
 
     self.selected = ko.observable(false);
     self.name = params.name;
@@ -66,6 +74,10 @@ function FavoritesGroup(params) {
     self.list = ko.observableArray(params.instruments);
     self.onFoldChange = params.onFoldChange;
     self.onClose = params.onClose.bind(this);
+
+    if(state) {
+        self.readState(state);
+    }
 
     //TODO For test
     self.onFold(false);

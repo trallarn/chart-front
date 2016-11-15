@@ -5,7 +5,6 @@ var PubSub = require('pubsub-js');
 var FavoritesGroup = require('./FavoritesGroup');
 var moment = require('moment');
 
-var stateRW = require('../infrastructure/StateRW');
 var assertions = require('../infrastructure/Assertions.js');
 
 ko.components.register('favorites', {
@@ -57,15 +56,17 @@ ko.components.register('favorites', {
         };
 
         self.loadGroups = function() {
-            // TODO
-            //self.groups([
-            //    new FavoritesGroup({
-            //        name: ko.observable(1),
-            //        instruments: [],
-            //        onClose: self.onGroupClose,
-            //        onFoldChange: self.onGroupFoldChange
-            //    }) 
-            //]);
+            self.favoritesAPI.loadFavorites()
+                .done(function(groups) {
+                    self.groups(_.map(groups, function(groupState) {
+                        return new FavoritesGroup({
+                            state: groupState,
+                            name: ko.observable(),
+                            onClose: self.onGroupClose,
+                            onFoldChange: self.onGroupFoldChange
+                        });
+                    }));
+                });
         };
 
         self.saveGroup = function(group) {
@@ -100,7 +101,7 @@ ko.components.register('favorites', {
         PubSub.subscribe('favorites/saveInstruments', self.saveInstruments);
         PubSub.subscribe('favorites/toggleFold', self.toggleFold);
 
-        self.loadGroups();
+        PubSub.subscribe('user.loggedIn', self.loadGroups);
     },
     template: require('../templates/favorites.html')
 });
