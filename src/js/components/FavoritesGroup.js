@@ -4,6 +4,9 @@ var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
+var InstrumentsAPI = require('../api/InstrumentsAPI');
+var instrumentsAPI = new InstrumentsAPI();
+var InstrumentVM = require('../vm/InstrumentVM');
 
 function FavoritesGroup(params) {
     var self = this;
@@ -14,6 +17,7 @@ function FavoritesGroup(params) {
         });
 
         self.list(self.list().concat(newInstruments));
+        self.onListChange();
     };
 
     self.toggleFold = function() {
@@ -26,16 +30,23 @@ function FavoritesGroup(params) {
         self.onFold();
     };
 
+    self.onListChange = function() {
+        if(self.onListChangeCallback) {
+            self.onListChangeCallback(self);
+        }
+    };
+
     self.onFold = function(isFolded) {
         self.isFolded(isFolded);
 
-        if(self.onFoldChange) {
-            self.onFoldChange(self, self.isFolded());
+        if(self.onFoldChangeCallback) {
+            self.onFoldChangeCallback(self, self.isFolded());
         }
     };
 
     self.onRemoveFromFavoriteClick = function(el) {
         self.list(_.reject(self.list(), self.hasSameSymbol.bind(self, el)));
+        self.onListChange();
     };
 
     self.hasSameSymbol = function(i1, i2) {
@@ -55,7 +66,10 @@ function FavoritesGroup(params) {
     self.readState = function(state) {
         self.id = state.id;
         self.name(state.name);
-        self.list(state.list);
+        instrumentsAPI.getInstruments(state.list || [])
+            .then(function(instruments) {
+                self.list(instruments ? InstrumentVM.toModels(instruments) : []);
+            });
     };
 
     self.actions = {
@@ -72,8 +86,9 @@ function FavoritesGroup(params) {
     self.name = params.name;
     self.isFolded = ko.observable();
     self.list = ko.observableArray(params.instruments);
-    self.onFoldChange = params.onFoldChange;
-    self.onClose = params.onClose.bind(this);
+    self.onFoldChangeCallback  = params.onFoldChange;
+    self.onCloseCallback  = params.onClose.bind(this);
+    self.onListChangeCallback = params.onListChange.bind(this);
 
     if(state) {
         self.readState(state);

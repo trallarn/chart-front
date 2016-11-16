@@ -42,11 +42,16 @@ ko.components.register('favorites', {
 
             self.deleteGroup(this);
         };
+
+        self.onGroupListChange = function(group) {
+            self.updateGroupDebounced(group);
+        };
        
         self.addGroup = function() {
             var newGroup = new FavoritesGroup({
                 name: ko.observable(moment().format('lll')),
                 instruments: [],
+                onListChange: self.onGroupListChange,
                 onClose: self.onGroupClose,
                 onFoldChange: self.onGroupFoldChange
             });
@@ -62,6 +67,8 @@ ko.components.register('favorites', {
                         return new FavoritesGroup({
                             state: groupState,
                             name: ko.observable(),
+                            instruments: [],
+                            onListChange: self.onGroupListChange,
                             onClose: self.onGroupClose,
                             onFoldChange: self.onGroupFoldChange
                         });
@@ -80,6 +87,7 @@ ko.components.register('favorites', {
         assertions.throwIfUndefined(params.favoritesAPI);
 
         self.favoritesAPI = params.favoritesAPI;
+        self.updateGroupDebounced = _.debounce(self.favoritesAPI.updateGroup, 1000);
 
         // Todo: read favorites from state?
         self.currentGroup = ko.observable();

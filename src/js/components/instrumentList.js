@@ -4,6 +4,7 @@ var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
 var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
+var InstrumentVM = require('../vm/InstrumentVM');
 
 ko.components.register('instrumentList', {
     viewModel: function(params) {
@@ -52,11 +53,7 @@ ko.components.register('instrumentList', {
             }
 
             $.getJSON(url , function (data) {
-                var models = _.map(data, function(el) {
-                    el.active = ko.observable();
-                    el.compared = ko.observable();
-                    return el;
-                });
+                var models = InstrumentVM.toModels(data);
 
                 var errorFilter = function(instrument) {
                     return instrument.extra && instrument.extra.error || false;

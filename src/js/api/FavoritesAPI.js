@@ -23,6 +23,20 @@ FavoritesAPI.prototype = {
             }.bind(this));
     },
 
+    updateGroup: function(group) {
+        $.ajax({
+            type: 'PUT',
+            url: settings.withAPIBase('favoritesAPI', '/favorites'), 
+            data: group.toStateObj(),
+            xhrFields: {
+                withCredentials: true
+            }
+        })
+            .fail(function() {
+                console.warn('savegroup request failed');
+                this._notifyFail();
+            }.bind(this));
+    },
     saveGroup: function(group) {
         $.ajax({
             type: 'POST',
