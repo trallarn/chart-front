@@ -60,7 +60,7 @@ function FavoritesGroup(params) {
     self.toStateObj = function() {
         return {
             id: self.id,
-            name: self.name,
+            name: self.name(),
             list: _.map(self.list(), function(instr) { 
                 return instr.symbol; 
             })
@@ -77,7 +77,7 @@ function FavoritesGroup(params) {
 
     self.selected = ko.observable(false);
     self.id = params.id;
-    self.name = params.name;
+    self.name = ko.observable(params.name);
     self.isFolded = ko.observable(!!params.isFolded);
     self.list = ko.observableArray(params.list);
     self.onFoldChangeCallback  = params.onFoldChange;

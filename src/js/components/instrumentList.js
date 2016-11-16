@@ -161,7 +161,7 @@ ko.components.register('instrumentList', {
                 self.errorName(val + ' (in error)');
 
                 if(self.onNameChangeCallback) {
-                    self.onNameChangeCallback.bind(this);
+                    self.onNameChangeCallback.apply(this);
                 }
             });
         } else {

@@ -50,7 +50,7 @@ ko.components.register('favorites', {
         self.addGroup = function() {
             var newGroup = new FavoritesGroup(
                 _.extend({
-                    name: ko.observable(moment().format('lll')),
+                    name: moment().format('lll'),
                     list: []
                 }, self.groupOptions)
             );
@@ -66,14 +66,6 @@ ko.components.register('favorites', {
 
                         var options = _.extend({ isFolded: true }, self.groupOptions);
                         return FavoritesGroup.fromState(groupState, options);
-                        //return new FavoritesGroup({
-                        //    state: groupState,
-                        //    name: ko.observable(),
-                        //    list: [],
-                        //    onChange: self.onGroupChange,
-                        //    onClose: self.onGroupClose,
-                        //    onFoldChange: self.onGroupFoldChange
-                        //});
                     }));
                 });
         };
