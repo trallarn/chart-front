@@ -67,39 +67,41 @@ function FavoritesGroup(params) {
         };
     };
 
-    self.readState = function(state) {
-        self.id = state.id;
-        self.name(state.name);
-        self.isFolded(true);
-
-        instrumentsAPI.getInstruments(state.list || [])
-            .then(function(instruments) {
-                self.list(instruments ? InstrumentVM.toModels(instruments) : []);
-            });
-    };
-
     self.actions = {
         onRemoveFromFavoriteClick: self.onRemoveFromFavoriteClick
     };
 
-    var state = params.state;
-
-    if(!state && !params.name) {
+    if(!params.name) {
         throw 'missing name';
     }
 
     self.selected = ko.observable(false);
+    self.id = params.id;
     self.name = params.name;
-    self.isFolded = ko.observable();
-    self.list = ko.observableArray(params.instruments);
+    self.isFolded = ko.observable(!!params.isFolded);
+    self.list = ko.observableArray(params.list);
     self.onFoldChangeCallback  = params.onFoldChange;
     self.onCloseCallback  = params.onClose.bind(this);
     self.onChangeCallback = params.onChange.bind(this);
 
-    if(state) {
-        self.readState(state);
-    }
 }
+
+/**
+ * Constructs from a group state.
+ */
+FavoritesGroup.fromState = function(state, options) {
+
+    options = _.extend({}, state, options);
+    options.list = []; // Empty list is populated below
+    var group = new FavoritesGroup(options);
+
+    instrumentsAPI.getInstruments(state.list || [])
+        .then(function(instruments) {
+            group.list(instruments ? InstrumentVM.toModels(instruments) : []);
+        });
+
+    return group;
+};
 
 ko.components.register('favoritesGroup', {
     viewModel: FavoritesGroup,

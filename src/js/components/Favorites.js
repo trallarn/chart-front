@@ -48,13 +48,12 @@ ko.components.register('favorites', {
         };
        
         self.addGroup = function() {
-            var newGroup = new FavoritesGroup({
-                name: ko.observable(moment().format('lll')),
-                instruments: [],
-                onChange: self.onGroupChange,
-                onClose: self.onGroupClose,
-                onFoldChange: self.onGroupFoldChange
-            });
+            var newGroup = new FavoritesGroup(
+                _.extend({
+                    name: ko.observable(moment().format('lll')),
+                    list: []
+                }, self.groupOptions)
+            );
 
             self.groups.unshift(newGroup);
             self.saveGroup(newGroup);
@@ -64,14 +63,17 @@ ko.components.register('favorites', {
             self.favoritesAPI.loadFavorites()
                 .done(function(groups) {
                     self.groups(_.map(groups, function(groupState) {
-                        return new FavoritesGroup({
-                            state: groupState,
-                            name: ko.observable(),
-                            instruments: [],
-                            onChange: self.onGroupChange,
-                            onClose: self.onGroupClose,
-                            onFoldChange: self.onGroupFoldChange
-                        });
+
+                        var options = _.extend({ isFolded: true }, self.groupOptions);
+                        return FavoritesGroup.fromState(groupState, options);
+                        //return new FavoritesGroup({
+                        //    state: groupState,
+                        //    name: ko.observable(),
+                        //    list: [],
+                        //    onChange: self.onGroupChange,
+                        //    onClose: self.onGroupClose,
+                        //    onFoldChange: self.onGroupFoldChange
+                        //});
                     }));
                 });
         };
@@ -88,6 +90,12 @@ ko.components.register('favorites', {
 
         self.favoritesAPI = params.favoritesAPI;
         self.updateGroupDebounced = _.debounce(self.favoritesAPI.updateGroup, 1000);
+
+        self.groupOptions = {
+            onChange: self.onGroupChange,
+            onClose: self.onGroupClose,
+            onFoldChange: self.onGroupFoldChange
+        };
 
         // Todo: read favorites from state?
         self.currentGroup = ko.observable();
