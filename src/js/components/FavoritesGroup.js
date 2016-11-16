@@ -17,7 +17,7 @@ function FavoritesGroup(params) {
         });
 
         self.list(self.list().concat(newInstruments));
-        self.onListChange();
+        self.onChange();
     };
 
     self.toggleFold = function() {
@@ -30,10 +30,14 @@ function FavoritesGroup(params) {
         self.onFold();
     };
 
-    self.onListChange = function() {
-        if(self.onListChangeCallback) {
-            self.onListChangeCallback(self);
+    self.onChange = function() {
+        if(self.onChangeCallback) {
+            self.onChangeCallback(self);
         }
+    };
+
+    self.onNameChange = function() {
+        self.onChange();
     };
 
     self.onFold = function(isFolded) {
@@ -46,7 +50,7 @@ function FavoritesGroup(params) {
 
     self.onRemoveFromFavoriteClick = function(el) {
         self.list(_.reject(self.list(), self.hasSameSymbol.bind(self, el)));
-        self.onListChange();
+        self.onChange();
     };
 
     self.hasSameSymbol = function(i1, i2) {
@@ -88,7 +92,7 @@ function FavoritesGroup(params) {
     self.list = ko.observableArray(params.instruments);
     self.onFoldChangeCallback  = params.onFoldChange;
     self.onCloseCallback  = params.onClose.bind(this);
-    self.onListChangeCallback = params.onListChange.bind(this);
+    self.onChangeCallback = params.onChange.bind(this);
 
     if(state) {
         self.readState(state);

@@ -43,7 +43,7 @@ ko.components.register('favorites', {
             self.deleteGroup(this);
         };
 
-        self.onGroupListChange = function(group) {
+        self.onGroupChange = function(group) {
             self.updateGroupDebounced(group);
         };
        
@@ -51,7 +51,7 @@ ko.components.register('favorites', {
             var newGroup = new FavoritesGroup({
                 name: ko.observable(moment().format('lll')),
                 instruments: [],
-                onListChange: self.onGroupListChange,
+                onChange: self.onGroupChange,
                 onClose: self.onGroupClose,
                 onFoldChange: self.onGroupFoldChange
             });
@@ -68,7 +68,7 @@ ko.components.register('favorites', {
                             state: groupState,
                             name: ko.observable(),
                             instruments: [],
-                            onListChange: self.onGroupListChange,
+                            onChange: self.onGroupChange,
                             onClose: self.onGroupClose,
                             onFoldChange: self.onGroupFoldChange
                         });

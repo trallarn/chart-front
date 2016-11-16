@@ -134,6 +134,7 @@ ko.components.register('instrumentList', {
 
         this.showCloseButton = params.showCloseButton;
         this.onCloseCallback = params.onCloseCallback;
+        this.onNameChangeCallback = params.onNameChange;
         this.showEditNameInput = ko.observable(false);
         this.supportEditName = params.supportEditName;
         this.supportEditName = params.supportEditName;
@@ -158,6 +159,10 @@ ko.components.register('instrumentList', {
         if(typeof this.name === 'function') {
             this.name.subscribe(function(val) {
                 self.errorName(val + ' (in error)');
+
+                if(self.onNameChangeCallback) {
+                    self.onNameChangeCallback.bind(this);
+                }
             });
         } else {
             self.errorName(this.name + ' (in error)');
