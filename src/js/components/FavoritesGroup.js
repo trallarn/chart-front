@@ -70,6 +70,8 @@ function FavoritesGroup(params) {
     self.readState = function(state) {
         self.id = state.id;
         self.name(state.name);
+        self.isFolded(true);
+
         instrumentsAPI.getInstruments(state.list || [])
             .then(function(instruments) {
                 self.list(instruments ? InstrumentVM.toModels(instruments) : []);
@@ -97,9 +99,6 @@ function FavoritesGroup(params) {
     if(state) {
         self.readState(state);
     }
-
-    //TODO For test
-    self.onFold(false);
 }
 
 ko.components.register('favoritesGroup', {
