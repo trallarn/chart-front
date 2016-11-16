@@ -97,10 +97,9 @@ ko.components.register('favorites', {
             onFoldChange: self.onGroupFoldChange
         };
 
-        // Todo: read favorites from state?
         self.currentGroup = ko.observable();
 
-        self.isFolded = ko.observable(false);
+        self.isFolded = ko.observable(true);
 
         self.groups = ko.observableArray();
 
