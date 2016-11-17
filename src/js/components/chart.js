@@ -137,9 +137,10 @@ ko.components.register('chart', {
             });
 
             _.each(comparedSeries, function(series) {
-                var s = self.chart.addSeries(series);
+                var s = self.chart.addSeries(series, false, false);
             });
 
+            //self.chart.redraw();
         };
 
         this.updateChartWithComparedSeries = function(instruments) {
