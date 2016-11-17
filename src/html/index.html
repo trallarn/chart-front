@@ -5,23 +5,28 @@
     <link rel="stylesheet" type="text/css" href="../style/all.css">
 </head>
 
-<body>
+<body class="full-height" >
 
     <div data-bind="component: 'notification'"></div>
 
-    <div class="floating-components-container" >
-        <div data-bind="component: {
-            name: 'favorites',
-            params: {
-                favoritesAPI: $root.favoritesAPI
-            }}">
-        </div>
-    </div>
+    <div class="full-height flex-container flex-container--col" > 
+        <!-- ko template: 'topMenu' -->
+        <!-- /ko -->
 
-    <div class="chart-and-list-container" data-bind="component: {
-        name: 'chartAndList',
-        params: {}
-        }">
+        <div class="floating-components-container" >
+            <div data-bind="component: {
+                name: 'favorites',
+                params: {
+                    favoritesAPI: $root.favoritesAPI
+                }}">
+            </div>
+        </div>
+
+        <div class="chart-and-list-container" data-bind="component: {
+            name: 'chartAndList',
+            params: {}
+            }">
+        </div>
     </div>
 
     <div class="ko-templates-container" ></div>

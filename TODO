@@ -1,8 +1,9 @@
 TODO
-add/remove fave-groups
-fave should use state
 
 DONE
+fix user-ui on large screen
+add/remove fave-groups
+fave should use state
 fix candlestick changing color to green when zooming in
 update chart timespan when setting to/from-dates in WinnerLoser-view
 highlight indices in winner loser list so they stand out
