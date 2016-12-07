@@ -34,6 +34,20 @@ InstrumentsAPI.prototype = {
             }.bind(this));
     },
 
+    getExtremas: function(symbol) {
+        return Promise.resolve($.ajax({
+            url: settings.withAPIBase('seriesAnalysisAPI', '/extremas'), 
+            type: 'GET',
+            data: data,
+            xhrFields: {
+                withCredentials: true
+            }
+        }))
+            .catch(function() {
+                this._notifyFail();
+            }.bind(this));
+    },
+
     _notifyFail: function() {
         PubSub.publish('notification.warn', { msg: 'Instrument API-request failed.' });
     }

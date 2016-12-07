@@ -6,6 +6,7 @@ var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
+var instrumentsAPI = require('../api/InstrumentsAPI.js')();
 
 ko.components.register('chart', {
 
@@ -236,6 +237,18 @@ ko.components.register('chart', {
             xAxises[0].setExtremes(data.from.getTime(), data.to.getTime(), redraw);
         };
 
+        this.addYPlotLine = function(msg, data) {
+            var axises = self.chart.yAxis;
+
+            axises[0].addPlotLine({
+                id: data.id,
+                width: 2,
+                color: data.color || 'black',
+                label: data.label,
+                value: data.value
+            });
+        };
+
         this.addXPlotLine = function(msg, data) {
             var xAxises = self.chart.xAxis;
 
@@ -274,6 +287,21 @@ ko.components.register('chart', {
             }
         };
 
+        self.showExtremas = function() {
+            var main = self.getMainSerie();
+            var symbol = main.name;
+
+            instrumentsAPI.getExtremas(name)
+                .then(function(extremas) {
+                    _.each(extremas, function(extrema) {
+                        self.addYPlotLine({
+                            value: extrema,
+                            id: 'extrema-' + math.random
+                        });
+                    });
+                });
+        };
+        
         self.setLinearScale = function() {
             var yAxis = self.chart.yAxis[0];
             yAxis.update({ type: 'linear' });
