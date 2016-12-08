@@ -34,22 +34,29 @@ InstrumentsAPI.prototype = {
             }.bind(this));
     },
 
-    getExtremas: function(symbol) {
+    getExtremas: function(symbol, data) {
+        if(!symbol) {
+            throw 'Must supply symbol';
+        }
+        if(!data.epsilon) {
+            throw 'Must supply epsilon';
+        }
+
         return Promise.resolve($.ajax({
-            url: settings.withAPIBase('seriesAnalysisAPI', '/extremas'), 
+            url: settings.withAPIBase('seriesAnalysisAPI', '/seriesAnalysis/extremas/' + symbol), 
             type: 'GET',
             data: data,
             xhrFields: {
                 withCredentials: true
             }
         }))
-            .catch(function() {
-                this._notifyFail();
+            .catch(function(e) {
+                this._notifyFail(e);
             }.bind(this));
     },
 
-    _notifyFail: function() {
-        PubSub.publish('notification.warn', { msg: 'Instrument API-request failed.' });
+    _notifyFail: function(e) {
+        PubSub.publish('notification.warn', { msg: 'Instrument API-request failed.' + (e ? 'With message: ' + e : '') });
     }
 
 };

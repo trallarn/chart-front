@@ -3,10 +3,12 @@ var $ = require('jquery');
 var ko = require('knockout');
 var _ = require('underscore');
 var PubSub = require('pubsub-js');
+var moment = require('moment');
 
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
-var instrumentsAPI = require('../api/InstrumentsAPI.js')();
+var InstrumentsAPI = require('../api/InstrumentsAPI');
+var instrumentsAPI = new InstrumentsAPI();
 
 ko.components.register('chart', {
 
@@ -237,7 +239,7 @@ ko.components.register('chart', {
             xAxises[0].setExtremes(data.from.getTime(), data.to.getTime(), redraw);
         };
 
-        this.addYPlotLine = function(msg, data) {
+        this.addYPlotLine = function(data) {
             var axises = self.chart.yAxis;
 
             axises[0].addPlotLine({
@@ -291,14 +293,32 @@ ko.components.register('chart', {
             var main = self.getMainSerie();
             var symbol = main.name;
 
-            instrumentsAPI.getExtremas(name)
-                .then(function(extremas) {
-                    _.each(extremas, function(extrema) {
+            var data = {
+                epsilon: 0.02
+                ,from: moment().subtract(5, 'month').valueOf()
+            };
+
+            instrumentsAPI.getExtremas(symbol, data)
+                .then(function(data) {
+
+                    var extremes = [].concat(data.maxY)
+                        .concat(data.minY);
+
+                    var extremesX = [].concat(data.maxX)
+                        .concat(data.minX);
+
+                    _.each(extremes, function(extrema) {
                         self.addYPlotLine({
                             value: extrema,
-                            id: 'extrema-' + math.random
+                            id: 'extrema-' + Math.random()
                         });
                     });
+                    //_.each(extremesX, function(extrema) {
+                    //    self.addXPlotLine('', {
+                    //        value: new Date(extrema),
+                    //        id: 'extrema-' + Math.random()
+                    //    });
+                    //});
                 });
         };
         
