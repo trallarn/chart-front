@@ -106,6 +106,9 @@ ko.components.register('chart', {
             $.getJSON(url, function (data) {
 
 
+                self.removeExtremas();
+                self.removeExtremasTrend();
+
                 self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
 
@@ -289,36 +292,111 @@ ko.components.register('chart', {
             }
         };
 
-        self.showExtremas = function() {
-            var main = self.getMainSerie();
-            var symbol = main.name;
+        self.removeExtremas = function() {
+            _.each(self.yExtremasPlotLineIds, function(id) {
+                self.chart.yAxis[0].removePlotLine(id);
+            });
+            _.each(self.xExtremasPlotLineIds, function(id) {
+                self.chart.xAxis[0].removePlotLine(id);
+            });
+
+            self.yExtremasPlotLineIds = [];
+            self.xExtremasPlotLineIds = [];
+
+        };
+
+        self.removeExtremasTrend = function() {
+            var maxs = self.chart.get('maxs');
+
+            if(maxs) {
+                maxs.remove();
+            }
+            
+            var mins = self.chart.get('mins');
+
+            if(mins) {
+                mins.remove();
+            }
+        };
+
+        self.toggleExtremasTrend = function() {
+            if(self.chart.get('maxs')) {
+                self.removeExtremasTrend();
+                return;
+            }
 
             var data = {
-                epsilon: 0.02
-                ,from: moment().subtract(5, 'month').valueOf()
+                epsilon: 1
+                ,from: moment().subtract(28, 'month').valueOf()
             };
 
-            instrumentsAPI.getExtremas(symbol, data)
+            instrumentsAPI.getExtremas(self.getMainSerie().name, data)
                 .then(function(data) {
 
-                    var extremes = [].concat(data.maxY)
-                        .concat(data.minY);
+                    var extremes = [].concat(data.maxs)
+                        .concat(data.mins);
 
-                    var extremesX = [].concat(data.maxX)
-                        .concat(data.minX);
+                    var seriesDef = {
+                        type: 'line',
+                        id: 'extremes',
+                        name: false,
+                        data : false,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    };
+
+                    self.chart.addSeries(_.extend({}, seriesDef, { 
+                        data: data.maxs,
+                        id: 'maxs',
+                        name: 'maxs'
+                    }));
+
+                    self.chart.addSeries(_.extend({}, seriesDef, { 
+                        data: data.mins,
+                        id: 'mins',
+                        name: 'mins'
+                    }));
+                });
+        };
+
+        self.toggleExtremas = function() {
+            if(self.yExtremasPlotLineIds.length > 0) {
+                self.removeExtremas();
+                return;
+            }
+
+            var data = {
+                epsilon: 2
+                ,from: moment().subtract(28, 'month').valueOf()
+            };
+
+            instrumentsAPI.getExtremas(self.getMainSerie().name, data)
+                .then(function(data) {
+
+                    var extremes = [].concat(data.maxs)
+                        .concat(data.mins);
 
                     _.each(extremes, function(extrema) {
+                        var id = 'extrema-' + Math.random();
                         self.addYPlotLine({
-                            value: extrema,
-                            id: 'extrema-' + Math.random()
+                            value: extrema[1],
+                            id: id
                         });
+
+                        self.yExtremasPlotLineIds.push(id);
                     });
-                    //_.each(extremesX, function(extrema) {
-                    //    self.addXPlotLine('', {
-                    //        value: new Date(extrema),
-                    //        id: 'extrema-' + Math.random()
-                    //    });
-                    //});
+
+                    _.each(extremes, function(extrema) {
+                        var id = 'extrema-' + Math.random();
+                        self.addXPlotLine('', {
+                            value: new Date(extrema[0]),
+                            id: id
+                        });
+
+                        self.xExtremasPlotLineIds.push(id);
+                    });
+
                 });
         };
         
@@ -342,6 +420,8 @@ ko.components.register('chart', {
 
         self.chartedInstrument = params.chartedInstrument;
         self.comparedInstruments = params.comparedInstruments;
+        self.yExtremasPlotLineIds = [];
+        self.xExtremasPlotLineIds = [];
 
         self.chartedInstrument.subscribe(function(val){
             self.updateChartWithMainSeries(val.symbol);

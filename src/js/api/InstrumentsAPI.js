@@ -38,7 +38,7 @@ InstrumentsAPI.prototype = {
         if(!symbol) {
             throw 'Must supply symbol';
         }
-        if(!data.epsilon) {
+        if(isNaN(data.epsilon)) {
             throw 'Must supply epsilon';
         }
 
