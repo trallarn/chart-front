@@ -363,12 +363,18 @@ ko.components.register('chart', {
         self.toggleExtremas = function() {
             if(self.yExtremasPlotLineIds.length > 0) {
                 self.removeExtremas();
+            }
+
+            if(self.extremeOption() < 0) {
+                self.removeExtremas();
                 return;
             }
 
+            var agoParams = self.extremeAgoInput().split(' ');
+
             var data = {
-                epsilon: 2
-                ,from: moment().subtract(28, 'month').valueOf()
+                epsilon: self.extremeOption()
+                ,from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
             };
 
             instrumentsAPI.getExtremas(self.getMainSerie().name, data)
@@ -387,14 +393,28 @@ ko.components.register('chart', {
                         self.yExtremasPlotLineIds.push(id);
                     });
 
-                    _.each(extremes, function(extrema) {
-                        var id = 'extrema-' + Math.random();
-                        self.addXPlotLine('', {
-                            value: new Date(extrema[0]),
-                            id: id
-                        });
+                    var xPlotFeed = [
+                        {
+                            extremes: data.maxs,
+                            color: 'red'
+                        },
+                        {
+                            extremes: data.mins,
+                            color: 'green'
+                        }
+                    ];
 
-                        self.xExtremasPlotLineIds.push(id);
+                    _.each(xPlotFeed, function(feed) {
+                        _.each(feed.extremes, function(extrema) {
+                            var id = 'extrema-' + Math.random();
+                            self.addXPlotLine('', {
+                                value: new Date(extrema[0]),
+                                color: feed.color,
+                                id: id
+                            });
+
+                            self.xExtremasPlotLineIds.push(id);
+                        });
                     });
 
                 });
@@ -422,6 +442,12 @@ ko.components.register('chart', {
         self.comparedInstruments = params.comparedInstruments;
         self.yExtremasPlotLineIds = [];
         self.xExtremasPlotLineIds = [];
+        self.extremeOptions = [-1, 0, 1, 2, 3, 4];
+        self.extremeOption = ko.observable(-1);
+        self.extremeAgoInput = ko.observable('1 year');
+
+        self.extremeOption.subscribe(self.toggleExtremas);
+        self.extremeAgoInput.subscribe(self.toggleExtremas);
 
         self.chartedInstrument.subscribe(function(val){
             self.updateChartWithMainSeries(val.symbol);
