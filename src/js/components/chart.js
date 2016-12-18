@@ -107,7 +107,6 @@ ko.components.register('chart', {
 
 
                 self.removeExtremas();
-                self.removeExtremasTrend();
 
                 self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
@@ -305,61 +304,6 @@ ko.components.register('chart', {
 
         };
 
-        self.removeExtremasTrend = function() {
-            var maxs = self.chart.get('maxs');
-
-            if(maxs) {
-                maxs.remove();
-            }
-            
-            var mins = self.chart.get('mins');
-
-            if(mins) {
-                mins.remove();
-            }
-        };
-
-        self.toggleExtremasTrend = function() {
-            if(self.chart.get('maxs')) {
-                self.removeExtremasTrend();
-                return;
-            }
-
-            var data = {
-                epsilon: 1
-                ,from: moment().subtract(28, 'month').valueOf()
-            };
-
-            instrumentsAPI.getExtremas(self.getMainSerie().name, data)
-                .then(function(data) {
-
-                    var extremes = [].concat(data.maxs)
-                        .concat(data.mins);
-
-                    var seriesDef = {
-                        type: 'line',
-                        id: 'extremes',
-                        name: false,
-                        data : false,
-                        tooltip: {
-                            valueDecimals: 2
-                        }
-                    };
-
-                    self.chart.addSeries(_.extend({}, seriesDef, { 
-                        data: data.maxs,
-                        id: 'maxs',
-                        name: 'maxs'
-                    }));
-
-                    self.chart.addSeries(_.extend({}, seriesDef, { 
-                        data: data.mins,
-                        id: 'mins',
-                        name: 'mins'
-                    }));
-                });
-        };
-
         self.showExtremas = function() {
             if(self.yExtremasPlotLineIds.length > 0) {
                 self.removeExtremas();
@@ -388,7 +332,6 @@ ko.components.register('chart', {
                                     text: ttlData.ttl
                                 }
                             });
-                                console.log('adding y ' + ttlData.ttl);
 
                             self.yExtremasPlotLineIds.push(id);
                         });
@@ -430,11 +373,6 @@ ko.components.register('chart', {
                 return;
             }
 
-            //if(self.extremeOption() < 0) {
-            //    self.removeExtremas();
-            //    return;
-            //}
-
             self.showExtremas();
         };
         
@@ -460,13 +398,10 @@ ko.components.register('chart', {
         self.comparedInstruments = params.comparedInstruments;
         self.yExtremasPlotLineIds = [];
         self.xExtremasPlotLineIds = [];
-        self.extremeOptions = [-1, 0, 1, 2, 3, 4];
-        self.extremeOption = ko.observable(-1);
         self.extremeAgoInput = ko.observable('5 year');
         self.extremeWildInput = ko.observable('100');
 
         self.extremeWildInput.subscribe(_.debounce(self.showExtremas, 500));
-        self.extremeOption.subscribe(self.showExtremas);
         self.extremeAgoInput.subscribe(self.showExtremas);
 
         self.chartedInstrument.subscribe(function(val){
