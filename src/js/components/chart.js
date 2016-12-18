@@ -360,64 +360,82 @@ ko.components.register('chart', {
                 });
         };
 
-        self.toggleExtremas = function() {
+        self.showExtremas = function() {
             if(self.yExtremasPlotLineIds.length > 0) {
                 self.removeExtremas();
-            }
-
-            if(self.extremeOption() < 0) {
-                self.removeExtremas();
-                return;
             }
 
             var agoParams = self.extremeAgoInput().split(' ');
 
             var data = {
-                epsilon: self.extremeOption()
+                ttls: self.extremeWildInput()
                 ,from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
             };
 
             instrumentsAPI.getExtremas(self.getMainSerie().name, data)
                 .then(function(data) {
 
-                    var extremes = [].concat(data.maxs)
-                        .concat(data.mins);
+                    _.each(data, function(ttlData) {
+                        var extremes = [].concat(ttlData.maxs)
+                            .concat(ttlData.mins);
 
-                    _.each(extremes, function(extrema) {
-                        var id = 'extrema-' + Math.random();
-                        self.addYPlotLine({
-                            value: extrema[1],
-                            id: id
-                        });
-
-                        self.yExtremasPlotLineIds.push(id);
-                    });
-
-                    var xPlotFeed = [
-                        {
-                            extremes: data.maxs,
-                            color: 'red'
-                        },
-                        {
-                            extremes: data.mins,
-                            color: 'green'
-                        }
-                    ];
-
-                    _.each(xPlotFeed, function(feed) {
-                        _.each(feed.extremes, function(extrema) {
+                        _.each(extremes, function(extrema) {
                             var id = 'extrema-' + Math.random();
-                            self.addXPlotLine('', {
-                                value: new Date(extrema[0]),
-                                color: feed.color,
-                                id: id
+                            self.addYPlotLine({
+                                value: extrema[1],
+                                id: id,
+                                label: {
+                                    text: ttlData.ttl
+                                }
                             });
+                                console.log('adding y ' + ttlData.ttl);
 
-                            self.xExtremasPlotLineIds.push(id);
+                            self.yExtremasPlotLineIds.push(id);
                         });
-                    });
+
+                        var xPlotFeed = [
+                            {
+                                extremes: ttlData.maxs,
+                                color: 'red'
+                            },
+                            {
+                                extremes: ttlData.mins,
+                                color: 'green'
+                            }
+                        ];
+
+                        _.each(xPlotFeed, function(feed) {
+                            _.each(feed.extremes, function(extrema) {
+                                var id = 'extrema-' + Math.random();
+                                self.addXPlotLine('', {
+                                    value: new Date(extrema[0]),
+                                    color: feed.color,
+                                    id: id,
+                                    label: {
+                                        text: ttlData.ttl
+                                    }
+                                });
+
+                                self.xExtremasPlotLineIds.push(id);
+                            });
+                        });
+                    }, this);
 
                 });
+        };
+
+        self.toggleExtremas = function() {
+            if(self.yExtremasPlotLineIds.length > 0) {
+                self.removeExtremas();
+                return;
+            }
+
+            //if(self.extremeOption() < 0) {
+            //    self.removeExtremas();
+            //    return;
+            //}
+
+            self.showExtremas();
         };
         
         self.setLinearScale = function() {
@@ -444,10 +462,12 @@ ko.components.register('chart', {
         self.xExtremasPlotLineIds = [];
         self.extremeOptions = [-1, 0, 1, 2, 3, 4];
         self.extremeOption = ko.observable(-1);
-        self.extremeAgoInput = ko.observable('1 year');
+        self.extremeAgoInput = ko.observable('5 year');
+        self.extremeWildInput = ko.observable('100');
 
-        self.extremeOption.subscribe(self.toggleExtremas);
-        self.extremeAgoInput.subscribe(self.toggleExtremas);
+        self.extremeWildInput.subscribe(_.debounce(self.showExtremas, 500));
+        self.extremeOption.subscribe(self.showExtremas);
+        self.extremeAgoInput.subscribe(self.showExtremas);
 
         self.chartedInstrument.subscribe(function(val){
             self.updateChartWithMainSeries(val.symbol);

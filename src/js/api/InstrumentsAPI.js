@@ -38,9 +38,6 @@ InstrumentsAPI.prototype = {
         if(!symbol) {
             throw 'Must supply symbol';
         }
-        if(isNaN(data.epsilon)) {
-            throw 'Must supply epsilon';
-        }
 
         return Promise.resolve($.ajax({
             url: settings.withAPIBase('seriesAnalysisAPI', '/seriesAnalysis/extremas/' + symbol), 
