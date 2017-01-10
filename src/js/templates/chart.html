@@ -4,10 +4,15 @@
         <button data-bind="click: setLinearScale">Lin</button>
         <button data-bind="click: setLogarithmicScale">Log</button>
         <button data-bind="click: toggleExtremas">Extremas</button>
+
         <div class="display-inline-block" >
-            <span class="display-block" >Extremes</span>
-            <input data-bind="textInput: extremeWildInput"></input>
-            <input data-bind="textInput: extremeAgoInput"></input>
+            <!-- ko component: {
+                name: 'extremasSettings',
+                params: {
+                    onLoad: $data.onExtremasSettingsLoad
+                }}
+                -->
+            <!-- /ko -->
         </div>
     </div>
     <div id="chart" class="chart" ></div>

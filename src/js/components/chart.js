@@ -309,10 +309,10 @@ ko.components.register('chart', {
                 self.removeExtremas();
             }
 
-            var agoParams = self.extremeAgoInput().split(' ');
+            var agoParams = self.extremasSettings.extremeAgoInput().split(' ');
 
             var data = {
-                ttls: self.extremeWildInput()
+                ttls: self.extremasSettings.extremeWildInput()
                 ,from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
             };
 
@@ -394,15 +394,17 @@ ko.components.register('chart', {
             throw 'Must supply comparedInstrument';
         }
 
+        self.onExtremasSettingsLoad = function(extremasSettings) {
+            self.extremasSettings = extremasSettings;
+
+            self.extremasSettings.extremeWildInput.subscribe(_.debounce(self.showExtremas, 500));
+            self.extremasSettings.extremeAgoInput.subscribe(self.showExtremas);
+        };
+
         self.chartedInstrument = params.chartedInstrument;
         self.comparedInstruments = params.comparedInstruments;
         self.yExtremasPlotLineIds = [];
         self.xExtremasPlotLineIds = [];
-        self.extremeAgoInput = ko.observable('5 year');
-        self.extremeWildInput = ko.observable('100');
-
-        self.extremeWildInput.subscribe(_.debounce(self.showExtremas, 500));
-        self.extremeAgoInput.subscribe(self.showExtremas);
 
         self.chartedInstrument.subscribe(function(val){
             self.updateChartWithMainSeries(val.symbol);
