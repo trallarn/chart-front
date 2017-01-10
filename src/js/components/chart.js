@@ -396,9 +396,7 @@ ko.components.register('chart', {
 
         self.onExtremasSettingsLoad = function(extremasSettings) {
             self.extremasSettings = extremasSettings;
-
-            self.extremasSettings.extremeWildInput.subscribe(_.debounce(self.showExtremas, 500));
-            self.extremasSettings.extremeAgoInput.subscribe(self.showExtremas);
+            self.extremasSettings.onChange = self.showExtremas;
         };
 
         self.chartedInstrument = params.chartedInstrument;
