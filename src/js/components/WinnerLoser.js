@@ -6,6 +6,8 @@ var PubSub = require('pubsub-js');
 var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
+var InstrumentsAPI = require('../api/InstrumentsAPI');
+var instrumentsAPI = new InstrumentsAPI();
 
 module.exports = WinnerLoser;
 
@@ -20,15 +22,6 @@ function WinnerLoser(params) {
     if(!params.comparedInstruments ) {
         throw 'must supply comparedInstruments ';
     }
-
-    this.lists = ko.observableArray([
-        {
-            name: ko.observable(''),
-            url:  ko.observable(),
-            listType: 'change',
-            showErrorList: true
-        }
-    ]);
 
     this.lists = ko.observableArray([
         {
@@ -130,16 +123,14 @@ function WinnerLoser(params) {
      * Fetches indices for the drop down and calls any deferred load state.
      */
     self.fetchIndices = function(callback) {
-        $.getJSON(self.indicesUrl, function(data) {
-            self.indices(_.pluck(data, 'name'));
+        instrumentsAPI.getIndices()
+            .then(function(data){
+                self.indices(_.pluck(data, 'name'));
 
-            if(self.deferredStateLoad) {
-                self.deferredStateLoad();
-            }
-        })
-        .fail(function(){
-            console.log('Failed getting indices');
-        });
+                if(self.deferredStateLoad) {
+                    self.deferredStateLoad();
+                }
+            });
     };
 
     self.closeClick = function() {
@@ -152,7 +143,6 @@ function WinnerLoser(params) {
 
     self.deferredStateLoad = false;
     self.baseUrl = settings.withQuoteAPIBase('/instruments/change?index={index}&from={from}&to={to}&callback=?');
-    self.indicesUrl = settings.withQuoteAPIBase('/indices?callback=?');
     self.indices = ko.observableArray();
     self.selectedIndex = ko.observable();
     self.feedback = ko.observable();

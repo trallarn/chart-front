@@ -1,0 +1,33 @@
+<div class="instrument-lists"  >
+
+    <div>
+
+        <h3>Extremas settings</h3>
+        <form data-bind="submit: updateList" >
+            <!-- ko component: {
+                name: 'extremasSettings',
+                params: {
+                    onLoad: onExtremasSettingsLoad
+                }}
+                -->
+            <!-- /ko -->
+            <label for="index">Index: </label>
+            <select name="index" type="select" data-bind="options: indices, selectedOptions: selectedIndex" ></select>
+            <label for="at" >At: </label><input name="at" type="text" data-bind="textInput: at" ></input>
+            <label for="withinPercent" >Within percent: </label><input name="withinPercent" type="text" data-bind="textInput: withinPercent" ></input>
+            <button type="submit" >Update</button>
+        </form>
+    </div>
+
+
+    <div data-bind="component: {
+        name: 'instrumentLists',
+        params: {
+            lists: lists,
+            chartedInstrument: $root.chartedInstrument,
+            comparedInstruments: $root.comparedInstruments
+        }
+    }">
+    </div>
+
+</div>

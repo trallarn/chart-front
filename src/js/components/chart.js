@@ -8,6 +8,7 @@ var moment = require('moment');
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
 var InstrumentsAPI = require('../api/InstrumentsAPI');
+var extremasAPI = require('../api/ExtremasAPI');
 var instrumentsAPI = new InstrumentsAPI();
 
 ko.components.register('chart', {
@@ -309,14 +310,14 @@ ko.components.register('chart', {
                 self.removeExtremas();
             }
 
-            var agoParams = self.extremasSettings.extremeAgoInput().split(' ');
+            var extremasConf = self.extremasSettings.get();
 
             var data = {
-                ttls: self.extremasSettings.extremeWildInput()
-                ,from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
+                ttls: extremasConf.wild,
+                from: extremasConf.from
             };
 
-            instrumentsAPI.getExtremas(self.getMainSerie().name, data)
+            extremasAPI.getExtremas(self.getMainSerie().name, data)
                 .then(function(data) {
 
                     _.each(data, function(ttlData) {

@@ -12,6 +12,7 @@ ko.components.register('listSelection', {
         var self = this;
 
         this.determineVisibleItem = function() {
+            self.isExtremasVisible(self.currentMenuItem() === 'Extremas');
             self.isWinnerLoserVisible(self.currentMenuItem() === 'WinnerLoser');
             self.isInstrumentsVisible(self.currentMenuItem() === 'Instruments');
         };
@@ -19,6 +20,7 @@ ko.components.register('listSelection', {
         this.chartAndList = params.chartAndList;
         this.currentMenuItem = params.currentMenuItem;
 
+        this.isExtremasVisible = ko.observable();
         this.isWinnerLoserVisible = ko.observable();
         this.isInstrumentsVisible = ko.observable();
 

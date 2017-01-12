@@ -19,4 +19,12 @@
         }}">
     </div>
 
+    <div data-bind="visible: isExtremasVisible(), component: {
+        name: 'extremas',
+        params: {
+            chartedInstrument: $root.chartedInstrument,
+            comparedInstruments: $root.comparedInstruments,
+            isActive: isExtremasVisible
+        }}">
+    </div>
 </div>

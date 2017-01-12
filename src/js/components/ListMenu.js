@@ -19,6 +19,10 @@ ko.components.register('listMenu', {
             {
                 display: 'WinnerLoser',
                 item: 'WinnerLoser'
+            },
+            {
+                display: 'Extremas',
+                item: 'Extremas'
             }
 
         ];

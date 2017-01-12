@@ -1,7 +1,11 @@
 var $ = require('jquery');
 var _ = require('underscore');
 var ko = require('knockout');
+var moment = require('moment');
 
+/**
+ * Optionally set the onChange-method in the onLoad-call.
+ */
 ko.components.register('extremasSettings', {
     viewModel: function(params) {
 
@@ -15,10 +19,17 @@ ko.components.register('extremasSettings', {
         self.extremeAgoInput = ko.observable('5 year');
 
         self.internalOnChange = function() {
-            self.onChange({
-                extremeWildInput: self.extremeWildInput(),
-                extremeAgoInput: self.extremeAgoInput()
-            });
+            self.onChange(self.get());
+        };
+
+        self.get = function() {
+            var agoParams = self.extremeAgoInput().split(' ');
+
+            return {
+                wild: self.extremeWildInput(),
+                ago: self.extremeAgoInput(),
+                from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
+            };
         };
 
         self.onChangeDebounced = _.debounce(self.internalOnChange , 500);
@@ -28,10 +39,6 @@ ko.components.register('extremasSettings', {
 
         if(params.onLoad) {
             params.onLoad(this);
-
-            if(!self.onChange) {
-                throw 'expected onChange-method to be set';
-            }
         }
 
     },

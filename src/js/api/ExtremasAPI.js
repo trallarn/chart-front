@@ -3,14 +3,12 @@ var PubSub = require('pubsub-js');
 
 var settings = require('../infrastructure/settings');
 
-module.exports = InstrumentsAPI;
-
-function InstrumentsAPI(options) {
+function ExtremasAPI(options) {
 }
 
-InstrumentsAPI.prototype = {
+ExtremasAPI.prototype = {
 
-    getInstruments: function(symbols) {
+    getInstrumentsCloseToExtremas: function(symbols) {
         var data = {};
 
         if(symbols) {
@@ -22,7 +20,7 @@ InstrumentsAPI.prototype = {
         }
 
         return Promise.resolve($.ajax({
-            url: settings.withAPIBase('instrumentsAPI', '/instruments'), 
+            url: settings.withAPIBase('extremasAPI', '/closeto'), 
             type: 'GET',
             data: data,
             xhrFields: {
@@ -34,13 +32,22 @@ InstrumentsAPI.prototype = {
             }.bind(this));
     },
 
-    getIndices: function(callback) {
-        var indicesUrl = settings.withQuoteAPIBase('/indices?callback=?');
+    getExtremas: function(symbol, data) {
+        if(!symbol) {
+            throw 'Must supply symbol';
+        }
 
-        return Promise.resolve($.getJSON(indicesUrl))
-            .catch(function(){
-                console.log('Failed getting indices');
-            });
+        return Promise.resolve($.ajax({
+            url: settings.withAPIBase('seriesAnalysisAPI', '/seriesAnalysis/extremas/' + symbol), 
+            type: 'GET',
+            data: data,
+            xhrFields: {
+                withCredentials: true
+            }
+        }))
+            .catch(function(e) {
+                this._notifyFail(e);
+            }.bind(this));
     },
 
     _notifyFail: function(e) {
@@ -48,4 +55,6 @@ InstrumentsAPI.prototype = {
     }
 
 };
+
+module.exports = new ExtremasAPI();
 
