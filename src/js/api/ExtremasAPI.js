@@ -8,37 +8,16 @@ function ExtremasAPI(options) {
 
 ExtremasAPI.prototype = {
 
-    getInstrumentsCloseToExtremas: function(symbols) {
-        var data = {};
-
-        if(symbols) {
-            if(symbols.length === 0) {
-                return Promise.resolve([]);
-            } else {
-                data.symbols = symbols;
-            }
-        }
-
-        return Promise.resolve($.ajax({
-            url: settings.withAPIBase('extremasAPI', '/closeto'), 
-            type: 'GET',
-            data: data,
-            xhrFields: {
-                withCredentials: true
-            }
-        }))
-            .catch(function() {
-                this._notifyFail();
-            }.bind(this));
-    },
-
+    /**
+     * Gets local min max for the given symbol
+     */
     getExtremas: function(symbol, data) {
         if(!symbol) {
             throw 'Must supply symbol';
         }
 
         return Promise.resolve($.ajax({
-            url: settings.withAPIBase('seriesAnalysisAPI', '/seriesAnalysis/extremas/' + symbol), 
+            url: settings.withAPIBase('extremasAPI', '/' + symbol), 
             type: 'GET',
             data: data,
             xhrFields: {

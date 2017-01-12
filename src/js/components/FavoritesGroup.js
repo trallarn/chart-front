@@ -4,8 +4,7 @@ var ko = require('knockout');
 var PubSub = require('pubsub-js');
 
 var stateRW = require('../infrastructure/StateRW');
-var InstrumentsAPI = require('../api/InstrumentsAPI');
-var instrumentsAPI = new InstrumentsAPI();
+var instrumentsAPI = require('../api/InstrumentsAPI');
 var InstrumentVM = require('../vm/InstrumentVM');
 
 function FavoritesGroup(params) {

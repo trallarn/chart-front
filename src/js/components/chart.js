@@ -7,9 +7,8 @@ var moment = require('moment');
 
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
-var InstrumentsAPI = require('../api/InstrumentsAPI');
+var instrumentsAPI = require('../api/InstrumentsAPI');
 var extremasAPI = require('../api/ExtremasAPI');
-var instrumentsAPI = new InstrumentsAPI();
 
 ko.components.register('chart', {
 
@@ -18,78 +17,7 @@ ko.components.register('chart', {
         var self = this;
 
         this.stateId = 'chart';
-
         this.dailyQuotesUrl = settings.withQuoteAPIBase('/daily/{symbol}?chartType=ohlc&callback=?');
-
-        /**
-         * Creates the highstock-chart without data.
-         */
-        this.createChart = function() {
-            self.chart = Highcharts.StockChart('chart',  {
-                yAxis: {
-                    type: 'linear'
-                },
-                rangeSelector : {
-                    selected : 4,
-                    buttons: [{
-                        type: 'month',
-                        count: 1,
-                        text: '1m'
-                    }, {
-                        type: 'month',
-                        count: 3,
-                        text: '3m'
-                    }, {
-                        type: 'month',
-                        count: 6,
-                        text: '6m'
-                    }, {
-                        type: 'ytd',
-                        text: 'YTD'
-                    }, {
-                        type: 'year',
-                        count: 1,
-                        text: '1y'
-                    }, {
-                        type: 'all',
-                        text: 'All'
-                    }]
-                },
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    //pointFormat: require('../templates/highchartPointFormat.html'),
-                    xDateFormat: '%Y-%m-%d',
-                    valueDecimals: 2
-                },
-                series : [{
-                    type: 'candlestick',
-                    //turboThreshold: 0,
-                    id: 'main',
-                    dataGrouping: {
-                        units: [
-                            [
-                                'day', // unit name
-                                [1] // allowed multiples
-                            ], 
-                            [
-                                'week', // unit name
-                                [1] // allowed multiples
-                            ], [
-                                'month',
-                                [1, 2, 3, 4, 6]
-                            ]
-                        ],
-                        dateTimeLabelFormats: {
-                           day: ['%Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
-                           week: ['Week @ %Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
-                           month: ['%B %Y', '%B', '-%B %Y']
-                        }
-                    }
-                }]
-            });
-        };
 
         this.getMainSerie = function() {
             return self.chart.get('main');
@@ -106,13 +34,15 @@ ko.components.register('chart', {
 
             $.getJSON(url, function (data) {
 
-
-                self.removeExtremas();
-
                 self.getMainSerie().setData(data.quotes, false);
                 self.getMainSerie().name = data.symbol;
 
                 self.chart.setTitle( { text: data.symbol + ' Stock Price' } );
+
+                if(self.isExtremasShown) {
+                    self.removeExtremas();
+                    self.showExtremas(); // recalc extremas
+                }
 
                 self.chart.redraw();
 
@@ -293,6 +223,8 @@ ko.components.register('chart', {
         };
 
         self.removeExtremas = function() {
+            self.isExtremasShown = false;
+
             _.each(self.yExtremasPlotLineIds, function(id) {
                 self.chart.yAxis[0].removePlotLine(id);
             });
@@ -306,9 +238,11 @@ ko.components.register('chart', {
         };
 
         self.showExtremas = function() {
-            if(self.yExtremasPlotLineIds.length > 0) {
+            if(self.isExtremasShown) {
                 self.removeExtremas();
             }
+
+            self.isExtremasShown = true;
 
             var extremasConf = self.extremasSettings.get();
 
@@ -369,12 +303,16 @@ ko.components.register('chart', {
         };
 
         self.toggleExtremas = function() {
-            if(self.yExtremasPlotLineIds.length > 0) {
+            if(self.isExtremasShown) {
                 self.removeExtremas();
                 return;
             }
 
             self.showExtremas();
+        };
+
+        self.isExtremasPlotLinesShown = function() {
+            return self.yExtremasPlotLineIds.length > 0;
         };
         
         self.setLinearScale = function() {
@@ -394,6 +332,78 @@ ko.components.register('chart', {
         if(!params.comparedInstruments) {
             throw 'Must supply comparedInstrument';
         }
+
+        /**
+         * Creates the highstock-chart without data.
+         */
+        this.createChart = function() {
+            self.chart = Highcharts.StockChart('chart',  {
+                yAxis: {
+                    type: 'linear'
+                },
+                rangeSelector : {
+                    selected : 4,
+                    buttons: [{
+                        type: 'month',
+                        count: 1,
+                        text: '1m'
+                    }, {
+                        type: 'month',
+                        count: 3,
+                        text: '3m'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6m'
+                    }, {
+                        type: 'ytd',
+                        text: 'YTD'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1y'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }]
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    //pointFormat: require('../templates/highchartPointFormat.html'),
+                    xDateFormat: '%Y-%m-%d',
+                    valueDecimals: 2
+                },
+                series : [{
+                    type: 'candlestick',
+                    //turboThreshold: 0,
+                    id: 'main',
+                    dataGrouping: {
+                        units: [
+                            [
+                                'day', // unit name
+                                [1] // allowed multiples
+                            ], 
+                            [
+                                'week', // unit name
+                                [1] // allowed multiples
+                            ], [
+                                'month',
+                                [1, 2, 3, 4, 6]
+                            ]
+                        ],
+                        dateTimeLabelFormats: {
+                           day: ['%Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
+                           week: ['Week @ %Y-%m-%d', '%A, %b %e', '-%A, %b %e, %Y'],
+                           month: ['%B %Y', '%B', '-%B %Y']
+                        }
+                    }
+                }]
+            });
+        };
+
+        self.isExtremasShown = false;
 
         self.onExtremasSettingsLoad = function(extremasSettings) {
             self.extremasSettings = extremasSettings;

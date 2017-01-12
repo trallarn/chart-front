@@ -6,8 +6,7 @@ var PubSub = require('pubsub-js');
 var InstrumentTableSpec = require('../vm/InstrumentTableSpec.js');
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
-var InstrumentsAPI = require('../api/InstrumentsAPI');
-var instrumentsAPI = new InstrumentsAPI();
+var instrumentsAPI = require('../api/InstrumentsAPI');
 
 module.exports = WinnerLoser;
 

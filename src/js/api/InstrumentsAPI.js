@@ -3,8 +3,6 @@ var PubSub = require('pubsub-js');
 
 var settings = require('../infrastructure/settings');
 
-module.exports = InstrumentsAPI;
-
 function InstrumentsAPI(options) {
 }
 
@@ -48,4 +46,6 @@ InstrumentsAPI.prototype = {
     }
 
 };
+
+module.exports = new InstrumentsAPI();
 

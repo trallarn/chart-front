@@ -8,8 +8,7 @@ var WinnerLoser = require('./WinnerLoser');
 var stateRW = require('../infrastructure/StateRW');
 var settings = require('../infrastructure/settings');
 var InstrumentTableSpec = require('../vm/InstrumentTableSpec');
-var InstrumentsAPI = require('../api/InstrumentsAPI');
-var instrumentsAPI = new InstrumentsAPI();
+var instrumentsAPI = require('../api/InstrumentsAPI');
 
 function Extremas(params) {
     var self = this;
@@ -22,7 +21,6 @@ function Extremas(params) {
         throw 'must supply comparedInstruments ';
     }
 
-    //TODO at!!
     self.updateList = function() {
         var extremasConf = self.extremasSettings.get();
         var url = self.baseUrl
@@ -34,13 +32,6 @@ function Extremas(params) {
 
         self.lists()[0].url(url);
 
-//        extremasAPI.getInstrumentsCloseToExtremas(self.selectedIndex)
-//            .then(function(data) {
-//            })
-//            .catch(function(err) {
-//                console.error('failed with err: ' + err);
-//            });
-//
         self.saveState();
     };
 
