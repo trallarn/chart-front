@@ -19,7 +19,9 @@ ko.components.register('extremasSettings', {
         self.extremeAgoInput = ko.observable('5 year');
 
         self.internalOnChange = function() {
-            self.onChange(self.get());
+            if(self.onChange) {
+                self.onChange(self.get());
+            }
         };
 
         self.get = function() {
