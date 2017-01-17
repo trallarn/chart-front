@@ -248,7 +248,7 @@ ko.components.register('chart', {
 
             var data = {
                 ttls: extremasConf.wild,
-                from: extremasConf.from
+                from: extremasConf.from.valueOf()
             };
 
             extremasAPI.getExtremas(self.getMainSerie().name, data)

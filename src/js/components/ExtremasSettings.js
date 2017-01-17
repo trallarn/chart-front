@@ -30,7 +30,7 @@ ko.components.register('extremasSettings', {
             return {
                 wild: self.extremeWildInput(),
                 ago: self.extremeAgoInput(),
-                from: moment().subtract(agoParams[0], agoParams[1]).valueOf()
+                from: moment().subtract(agoParams[0], agoParams[1])
             };
         };
 

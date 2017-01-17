@@ -28,7 +28,7 @@ function Extremas(params) {
             .replace('{ttl}', extremasConf.wild)
             .replace('{at}', self.at())
             .replace('{withinPercent}', self.withinPercent())
-            .replace('{from}', extremasConf.from);
+            .replace('{from}', extremasConf.from.format('YYYY-MM-DD'));
 
         self.lists()[0].url(url);
 
