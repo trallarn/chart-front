@@ -21,10 +21,6 @@ h1 {
     height: 100%;
 }
 
-.top-menu {
-    @extend .pointer-on-hover;
-}
-
 .folded-height {
     height: 0;
     overflow: hidden;

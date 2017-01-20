@@ -25,6 +25,10 @@ ko.components.register('favorites', {
             self.isFolded(!self.isFolded());
         };
 
+        self.fold = function() {
+            this.isFolded(true);
+        };
+
         self.onGroupFoldChange = function(group, isFolded) {
             if(!isFolded) {
                 self.currentGroup(group);
@@ -103,6 +107,20 @@ ko.components.register('favorites', {
 
         self.currentGroup.subscribe(function(val){
             val.selected(true);
+        });
+
+        self.onMouseClick = function(e) {
+            if(!(e.target.closest('.favorites') || e.target.closest('.favorites-button'))) {
+                self.fold();
+            }
+        };
+
+        self.isFolded.subscribe(function(val) {
+            if(!val) {
+                window.addEventListener('click', self.onMouseClick, true);
+            } else {
+                window.removeEventListener('click', self.onMouseClick, true);
+            }
         });
 
         PubSub.subscribe('favorites/saveInstruments', self.saveInstruments);

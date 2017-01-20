@@ -2,7 +2,10 @@
     list-style-type: none;
 
     .top-menu-item {
+        @extend .pointer-on-hover;
+
         display: inline-block;
+        padding: 3px 10px;
     }
 
 }
