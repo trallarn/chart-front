@@ -34,7 +34,7 @@ ko.components.register('chart', {
 
             $.getJSON(url, function (data) {
 
-                self.getMainSerie().setData(data.quotes, false);
+                self.getMainSerie().setData(data.quotes, false, false, false);
                 self.getMainSerie().name = data.symbol;
 
                 self.chart.setTitle( { text: data.symbol + ' Stock Price' } );
@@ -44,8 +44,12 @@ ko.components.register('chart', {
                     self.showExtremas(); // recalc extremas
                 }
 
-                self.chart.redraw();
+                // Sets zoom level to the last one specified
+                if(self.xExtremes) {
+                    self.chart.xAxis[0].setExtremes(self.xExtremes.min, self.xExtremes.max, false, false);
+                }
 
+                self.chart.redraw();
             });
         };
 
@@ -341,6 +345,17 @@ ko.components.register('chart', {
                 yAxis: {
                     type: 'linear'
                 },
+                xAxis: {
+                    events: {
+                        setExtremes: function(e) {
+                            self.xExtremes = {
+                                min: e.min,
+                                max: e.max
+                            };
+                        }
+                    },
+                    startOnTick: false
+                },
                 rangeSelector : {
                     selected : 4,
                     buttons: [{
@@ -414,6 +429,7 @@ ko.components.register('chart', {
         self.comparedInstruments = params.comparedInstruments;
         self.yExtremasPlotLineIds = [];
         self.xExtremasPlotLineIds = [];
+        self.xExtremes = false;
 
         self.chartedInstrument.subscribe(function(val){
             self.updateChartWithMainSeries(val.symbol);
