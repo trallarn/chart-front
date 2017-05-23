@@ -17,16 +17,39 @@ ko.components.register('chart', {
         var self = this;
 
         this.stateId = 'chart';
-        this.dailyQuotesUrl = settings.withQuoteAPIBase('/daily/{symbol}?chartType=ohlc&callback=?');
+        this.quotesUrl = settings.withQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
+        this.periods = ['daily','weekly','monthly'];
+        this.selectedPeriod = ko.observable('daily');
+
+        this.isLoadingState = ko.observable(false);
+        this.isLoadingStateSubscription = false;
+
+        /**
+         * Update data series on change of period.
+         */
+        this.selectedPeriod.subscribe(val => {
+            this.updateComparedSeriesData();
+
+            if(this.chartedInstrument()) {
+                this.updateChartWithMainSeries(this.chartedInstrument().symbol);
+            }
+
+            this.saveState();
+        });
 
         this.getMainSerie = function() {
             return self.chart.get('main');
         };
 
+        this.buildQuotesUrl = (symbol) => {
+            return this.quotesUrl
+                .replace('{period}', this.selectedPeriod())
+                .replace('{symbol}', symbol);
+        };
+
         this.updateChartWithMainSeries = function(symbol, refreshData) {
 
-            var url = this.dailyQuotesUrl
-                .replace('{symbol}', symbol);
+            var url = this.buildQuotesUrl(symbol);
 
             if(refreshData) {
                 url += '&refreshData=1';
@@ -57,10 +80,14 @@ ko.components.register('chart', {
             return 'comp-' + symbol;
         };
 
+        this.fromComparisonId = function(seriesId) {
+            return seriesId.replace('comp-', '');
+        };
+
         /**
          * Adds compared series to the chart.
          */
-        this.addComparisonData = function(datas) {
+        this.addComparisonData = (datas) => {
             var comparedSeries = _.map(datas, function(data) {
 
                 return {
@@ -76,11 +103,31 @@ ko.components.register('chart', {
                 };
             });
 
-            _.each(comparedSeries, function(series) {
-                var s = self.chart.addSeries(series, false, false);
+            comparedSeries.forEach((series) => {
+                var s = this.chart.addSeries(series, false, false);
             });
 
-            //self.chart.redraw();
+            this.saveState();
+
+        };
+
+        this.getComparedSeries = () => {
+            return self.chart.series.filter((serie) => {
+                return !serie.options.isInternal && serie.options.id !== 'main';
+            });
+        };
+        this.getComparedSymbols = () => {
+            return this.getComparedSeries().map(series => this.fromComparisonId(series.options.id));
+        };
+
+        this.updateComparedSeriesData = () => {
+            this.getComparedSeries().forEach(series => {
+                const url = this.buildQuotesUrl(this.fromComparisonId(series.options.id));
+
+                $.getJSON(url, data => {
+                    series.setData(data.quotes);
+                });
+            });
         };
 
         this.updateChartWithComparedSeries = function(instruments) {
@@ -92,9 +139,8 @@ ko.components.register('chart', {
                 return self.chart.get(self.toComparisonId(instrument.symbol));
             });
 
-            _.each(toAdd, function(instrument) {
-                var url = this.dailyQuotesUrl
-                    .replace('{symbol}', instrument.symbol);
+            toAdd.forEach(instrument => {
+                var url = this.buildQuotesUrl(instrument.symbol);
 
                 $.getJSON(url, function(data) {
                     datas.push(data);
@@ -106,7 +152,7 @@ ko.components.register('chart', {
                     }
                 }.bind(this));
 
-            }.bind(this));
+            });
 
             // Remove uncompared series
             var seriesToRemove = _.filter(self.chart.series, function(serie) {
@@ -210,20 +256,49 @@ ko.components.register('chart', {
             xAxises[0].removePlotLine(data.id);
         };
 
-        self.saveState = function() {
-            stateRW.save(self.stateId, {
-                main: self.chartedInstrument().symbol
+        self.saveState = () => {
+            if(this.isLoadingState()) {
+                if(!this.isLoadingStateSubscription) {
+                    this.isLoadingStateSubscription = this.isLoadingState.subscribe(() => {
+                        this.saveState();
+                        this.isLoadingStateSubscription.dispose();
+                        this.isLoadingStateSubscription = false;
+                    });
+                }
+
+                return;
+            }
+
+            stateRW.save(this.stateId, {
+                period: this.selectedPeriod(),
+                main: this.chartedInstrument().symbol,
+                //compared: this.getComparedSymbols(),
             });
         };
 
-        self.loadState = function() {
-            var state = stateRW.read(self.stateId);
+        self.loadState = () => {
+            this.isLoadingState(true);
+            var state = stateRW.read(this.stateId);
             
             if(state) {
-                self.chartedInstrument( {
+                if(state.period) {
+                    this.selectedPeriod(state.period);
+                }
+
+                this.chartedInstrument({
                     symbol: state.main
                 });
+
+                // Need to sync with lists
+                //if(state.compared) {
+                //    // Update observable and lists should listen, but they don't
+                //    this.comparedInstruments(state.compared.map(c => { 
+                //        return { symbol: c } 
+                //    }));
+                //}
             }
+
+            this.isLoadingState(false);
         };
 
         self.removeExtremas = function() {

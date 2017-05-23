@@ -5,6 +5,8 @@
         <button data-bind="click: setLogarithmicScale">Log</button>
         <button data-bind="click: toggleExtremas">Extremas</button>
 
+        <select data-bind="options: periods, value: selectedPeriod" ></select>
+
         <div class="display-inline-block" >
             <!-- ko component: {
                 name: 'extremasSettings',
