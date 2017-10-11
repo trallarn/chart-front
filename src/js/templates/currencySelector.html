@@ -1,0 +1,12 @@
+<select name="curreny-selector" type="select" data-bind="
+        options: currencies, 
+        value: selectedCurrency, 
+        optionsText: 'symbol',
+        optionsCaption: 'Curr'
+    " >
+</select>
+<select name="curreny-selector-inverted" type="select" data-bind="
+        options: [1,-1], 
+        value: inverted
+    " >
+</select>

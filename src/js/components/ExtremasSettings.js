@@ -24,6 +24,8 @@ ko.components.register('extremasSettings', {
             }
         };
 
+        self.onChangeDebounced = _.debounce(self.internalOnChange , 500);
+
         self.get = function() {
             var agoParams = self.extremeAgoInput().split(' ');
 
@@ -34,8 +36,6 @@ ko.components.register('extremasSettings', {
             };
         };
 
-        self.onChangeDebounced = _.debounce(self.internalOnChange , 500);
-        
         self.extremeWildInput.subscribe(self.onChangeDebounced);
         self.extremeAgoInput.subscribe(self.onChangeDebounced);
 

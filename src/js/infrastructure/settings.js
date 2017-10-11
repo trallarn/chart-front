@@ -14,6 +14,9 @@ var settings = {
     withQuoteAPIBase: function(suffix) {
         return this.quoteAPIBase + suffix;
     },
+    withRealQuoteAPIBase: function(suffix) {
+        return this.realQuoteAPIBase + suffix;
+    },
 
     withAPIBase: function(api, suffix) {
         return this[api] + suffix;
@@ -33,7 +36,5 @@ _.each(expectedVariables, function(expected) {
 if(validationErrors.length > 0) {
     throw validationErrors.join('\n');
 }
-
-
 
 module.exports = settings;

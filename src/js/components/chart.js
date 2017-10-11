@@ -17,7 +17,7 @@ ko.components.register('chart', {
         var self = this;
 
         this.stateId = 'chart';
-        this.quotesUrl = settings.withQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
+        this.quotesUrl = settings.withRealQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
         this.periods = ['daily','weekly','monthly'];
         this.selectedPeriod = ko.observable('daily');
 
@@ -28,6 +28,13 @@ ko.components.register('chart', {
          * Update data series on change of period.
          */
         this.selectedPeriod.subscribe(val => {
+            this.updateChartSeries();
+        });
+
+        /**
+         * Updates chart series data. Saves state.
+         */
+        this.updateChartSeries = () => {
             this.updateComparedSeriesData();
 
             if(this.chartedInstrument()) {
@@ -35,16 +42,33 @@ ko.components.register('chart', {
             }
 
             this.saveState();
-        });
+        };
 
         this.getMainSerie = function() {
             return self.chart.get('main');
         };
 
         this.buildQuotesUrl = (symbol) => {
-            return this.quotesUrl
+            var url = this.quotesUrl
                 .replace('{period}', this.selectedPeriod())
                 .replace('{symbol}', symbol);
+
+            if(self.currencySelector) {
+
+                var currency = self.currencySelector.selectedCurrency();
+
+                if(currency) {
+                    url += '&currency_symbol=' + currency.symbol;
+
+                    var invertedCurrency = self.currencySelector.inverted();
+
+                    if(invertedCurrency) {
+                        url += '&inverted_currency=' + invertedCurrency;
+                    }
+                }
+            }
+
+            return url;
         };
 
         this.updateChartWithMainSeries = function(symbol, refreshData) {
@@ -498,6 +522,11 @@ ko.components.register('chart', {
         self.onExtremasSettingsLoad = function(extremasSettings) {
             self.extremasSettings = extremasSettings;
             self.extremasSettings.onChange = self.showExtremas;
+        };
+
+        self.onCurrencySelectorLoad = (currencySelector) => {
+            self.currencySelector = currencySelector;
+            self.currencySelector.onChange = self.updateChartSeries;
         };
 
         self.chartedInstrument = params.chartedInstrument;
