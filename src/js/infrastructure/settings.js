@@ -6,6 +6,7 @@ var env = require('../../../.env');
  * Loads environment variables.
  */ 
 var expectedVariables = [
+    'pyQuoteAPIBase',
     'quoteAPIBase',
     'favoritesAPI'
 ];
@@ -14,8 +15,8 @@ var settings = {
     withQuoteAPIBase: function(suffix) {
         return this.quoteAPIBase + suffix;
     },
-    withRealQuoteAPIBase: function(suffix) {
-        return this.realQuoteAPIBase + suffix;
+    withPyQuoteAPIBase: function(suffix) {
+        return this.pyQuoteAPIBase + suffix;
     },
 
     withAPIBase: function(api, suffix) {

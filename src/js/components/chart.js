@@ -17,7 +17,7 @@ ko.components.register('chart', {
         var self = this;
 
         this.stateId = 'chart';
-        this.quotesUrl = settings.withRealQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
+        this.quotesUrl = settings.withPyQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
         this.periods = ['daily','weekly','monthly'];
         this.selectedPeriod = ko.observable('daily');
 
