@@ -20,8 +20,12 @@ ko.components.register('instrumentListsInstruments', {
 
         this.lists = ko.observableArray([
             {
-                name: 'Indices',
+                name: 'Nordic indices',
                 url:  settings.withQuoteAPIBase('/indexComponents/Indices?callback=?')
+            },
+            {
+                name: 'Int.indices',
+                url:  settings.withQuoteAPIBase('/indexComponents/IntIndices?callback=?')
             },
             {
                 name: 'Currencies',
