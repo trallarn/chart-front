@@ -1,3 +1,3 @@
 <ul class="list-menu" data-bind="foreach: menuItems" >
-    <li class="list-menu-item" data-bind="click: $parent.selectMenuItem, text: display, css: { 'list-menu-item--selected' : $parent.currentMenuItem() === $data.item} "></li>
+    <li class="list-menu-item" ><a data-bind="click: $parent.selectMenuItem, text: display, css: { 'list-menu-item--selected' : $parent.currentMenuItem() === $data.item} "></a></li>
 </ul>
