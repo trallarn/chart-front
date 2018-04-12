@@ -18,7 +18,6 @@ var settings = {
     withPyQuoteAPIBase: function(suffix) {
         return this.pyQuoteAPIBase + suffix;
     },
-
     withAPIBase: function(api, suffix) {
         return this[api] + suffix;
     }

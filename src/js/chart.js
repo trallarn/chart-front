@@ -8,6 +8,7 @@ $(function () {
 $.getJSON(settings.withQuoteAPIBase('/daily/^BSESN?chartType=ohlc&callback=?'), function (raw) {
 var data = raw.quotes;
 
+
         // create the chart
         var chart = Highcharts.StockChart('testchart',  {
                 rangeSelector : {

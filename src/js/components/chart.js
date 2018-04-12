@@ -18,11 +18,15 @@ ko.components.register('chart', {
 
         this.stateId = 'chart';
         this.quotesUrl = settings.withPyQuoteAPIBase('/{period}/{symbol}?chartType=ohlc&callback=?');
+        this.taUrl = settings.withPyQuoteAPIBase('/technical-analysis/{period}/{symbol}?mas={mas}&callback=?');
         this.periods = ['daily','weekly','monthly'];
         this.selectedPeriod = ko.observable('daily');
 
         this.isLoadingState = ko.observable(false);
         this.isLoadingStateSubscription = false;
+
+        this.maSeriesIdPrefix = 'ma-';
+        this.comparedSeriesIdPrefix = 'comp-';
 
         /**
          * Update data series on change of period.
@@ -48,10 +52,14 @@ ko.components.register('chart', {
             return self.chart.get('main');
         };
 
-        this.buildQuotesUrl = (symbol) => {
-            var url = this.quotesUrl
+        this.urlWithPeriodAndSymbol = (url, symbol) => {
+            return url
                 .replace('{period}', this.selectedPeriod())
                 .replace('{symbol}', symbol);
+        };
+
+        this.buildQuotesUrl = (symbol) => {
+            let url = this.urlWithPeriodAndSymbol(this.quotesUrl, symbol);
 
             if(self.currencySelector) {
 
@@ -100,12 +108,16 @@ ko.components.register('chart', {
             });
         };
 
+        this.toMaId = period => {
+            return self.maSeriesIdPrefix + period;
+        };
+
         this.toComparisonId = function(symbol) {
-            return 'comp-' + symbol;
+            return self.comparedSeriesIdPrefix + symbol;
         };
 
         this.fromComparisonId = function(seriesId) {
-            return seriesId.replace('comp-', '');
+            return seriesId.replace(this.comparedSeriesIdPrefix, '');
         };
 
         /**
@@ -137,9 +149,10 @@ ko.components.register('chart', {
 
         this.getComparedSeries = () => {
             return self.chart.series.filter((serie) => {
-                return !serie.options.isInternal && serie.options.id !== 'main';
+                return !serie.options.isInternal && serie.options.id !== 'main' && serie.options.id.startsWith(self.comparedSeriesIdPrefix);
             });
         };
+
         this.getComparedSymbols = () => {
             return this.getComparedSeries().map(series => this.fromComparisonId(series.options.id));
         };
@@ -151,6 +164,16 @@ ko.components.register('chart', {
                 $.getJSON(url, data => {
                     series.setData(data.quotes);
                 });
+            });
+        };
+
+        this.removeSeriesByIdPrefix = seriesIdPrefix => {
+            let seriesToRemove = _.filter(self.chart.series, serie => {
+                return !serie.options.isInternal && serie.options.id !== 'main' && serie.options.id.startsWith(seriesIdPrefix);
+            });
+
+            _.each(seriesToRemove, serie => {
+                serie.remove(false);
             });
         };
 
@@ -179,8 +202,8 @@ ko.components.register('chart', {
             });
 
             // Remove uncompared series
-            var seriesToRemove = _.filter(self.chart.series, function(serie) {
-                return !serie.options.isInternal && serie.options.id !== 'main' && !_.find(instruments, function(instrument) {
+            var seriesToRemove = _.filter(self.getComparedSeries(), serie => {
+                return !serie.options.isInternal && serie.options.id !== 'main' && !_.find(instruments, instrument => {
                     return self.toComparisonId(instrument.symbol) === serie.options.id;
                 });
             });
@@ -428,6 +451,44 @@ ko.components.register('chart', {
             yAxis.update({ type: 'logarithmic' });
         };
 
+        self.showMovingAverages = settings => {
+            let url = self.urlWithPeriodAndSymbol(self.taUrl, self.getMainSerie().name)
+                .replace('{mas}', self.taSettings.get().mas); 
+
+            $.getJSON(url, data => {
+                let series = data.mas.forEach(data => {
+
+                    let chartSeries = {
+                        type: 'line',
+                        id: self.toMaId(data.symbol),
+                        name: data.symbol,
+                        data : data.quotes,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    };
+
+                    self.chart.addSeries(chartSeries, false,  false);
+                });
+
+                self.chart.redraw();
+            });
+        };
+
+        self.hideMovingAverages = () => {
+            self.removeSeriesByIdPrefix(self.maSeriesIdPrefix);
+        };
+
+        self.onTaSettingsChange = (settings) => {
+
+            self.hideMovingAverages();
+
+            if(self.taSettings.maEnabled()) {
+                let settings = self.taSettings.get();
+                self.showMovingAverages(settings);
+            }
+        };
+
         if(!params.chartedInstrument) {
             throw 'Must supply chartedInstrument';
         }
@@ -518,6 +579,11 @@ ko.components.register('chart', {
         };
 
         self.isExtremasShown = false;
+
+        self.onTaSettingsLoad = function(settings) {
+            self.taSettings = settings;
+            self.taSettings.onChange = self.onTaSettingsChange;
+        };
 
         self.onExtremasSettingsLoad = function(extremasSettings) {
             self.extremasSettings = extremasSettings;
