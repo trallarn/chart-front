@@ -94,12 +94,9 @@ ko.components.register('chart', {
 
                 self.chart.setTitle( { text: data.symbol + ' Stock Price' } );
 
-                if(self.isExtremasShown) {
-                    self.removeExtremas();
-                    self.updateExtremas(); // recalc extremas
-                }
+                self.updateExtremas(); // recalc extremas
 
-                self.onTaSettingsChange();
+                self.updateTa();
 
                 // Sets zoom level to the last one specified
                 if(self.xExtremes) {
@@ -351,7 +348,6 @@ ko.components.register('chart', {
         };
 
         self.removeExtremas = function() {
-            self.isExtremasShown = false;
 
             _.each(self.yExtremasPlotLineIds, function(id) {
                 self.chart.yAxis[0].removePlotLine(id);
@@ -365,19 +361,17 @@ ko.components.register('chart', {
 
         };
 
-        self.updateExtremas = function() {
-            if(self.isExtremasShown) {
-                self.removeExtremas();
+        self.updateExtremas = () => {
+            self.removeExtremas();
+
+            if(self.extremasSettings.enabled()) {
+                self.showExtremas();
             }
 
-            self.isExtremasShown = self.extremasSettings.enabled();
+        };
 
-            if(!self.isExtremasShown) {
-                return;
-            }
-
+        self.showExtremas = () => {
             var extremasConf = self.extremasSettings.get();
-
             var data = {
                 ttls: extremasConf.wild,
                 from: extremasConf.from.valueOf()
@@ -476,7 +470,7 @@ ko.components.register('chart', {
             self.removeSeriesByIdPrefix(self.maSeriesIdPrefix);
         };
 
-        self.onTaSettingsChange = () => {
+        self.updateTa = () => {
 
             self.hideMovingAverages();
 
@@ -575,11 +569,9 @@ ko.components.register('chart', {
             });
         };
 
-        self.isExtremasShown = false;
-
         self.onTaSettingsLoad = function(settings) {
             self.taSettings = settings;
-            self.taSettings.onChange = self.onTaSettingsChange;
+            self.taSettings.onChange = self.updateTa;
         };
 
         self.onExtremasSettingsLoad = function(extremasSettings) {
