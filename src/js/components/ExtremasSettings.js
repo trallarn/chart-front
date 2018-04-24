@@ -37,7 +37,7 @@ ko.components.register('extremasSettings', {
         };
 
         self.enabled = ko.observable(false);
-        self.enabled.subscribe(self.onChangeDebounced);
+        self.enabled.subscribe(self.internalOnChange);
         self.extremeWildInput.subscribe(self.onChangeDebounced);
         self.extremeAgoInput.subscribe(self.onChangeDebounced);
 
