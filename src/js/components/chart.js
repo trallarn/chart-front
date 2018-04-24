@@ -96,7 +96,7 @@ ko.components.register('chart', {
 
                 if(self.isExtremasShown) {
                     self.removeExtremas();
-                    self.showExtremas(); // recalc extremas
+                    self.updateExtremas(); // recalc extremas
                 }
 
                 // Sets zoom level to the last one specified
@@ -363,12 +363,16 @@ ko.components.register('chart', {
 
         };
 
-        self.showExtremas = function() {
+        self.updateExtremas = function() {
             if(self.isExtremasShown) {
                 self.removeExtremas();
             }
 
-            self.isExtremasShown = true;
+            self.isExtremasShown = self.extremasSettings.enabled();
+
+            if(!self.isExtremasShown) {
+                return;
+            }
 
             var extremasConf = self.extremasSettings.get();
 
@@ -426,15 +430,6 @@ ko.components.register('chart', {
                     }, this);
 
                 });
-        };
-
-        self.toggleExtremas = function() {
-            if(self.isExtremasShown) {
-                self.removeExtremas();
-                return;
-            }
-
-            self.showExtremas();
         };
 
         self.isExtremasPlotLinesShown = function() {
@@ -587,7 +582,7 @@ ko.components.register('chart', {
 
         self.onExtremasSettingsLoad = function(extremasSettings) {
             self.extremasSettings = extremasSettings;
-            self.extremasSettings.onChange = self.showExtremas;
+            self.extremasSettings.onChange = self.updateExtremas;
         };
 
         self.onCurrencySelectorLoad = (currencySelector) => {
