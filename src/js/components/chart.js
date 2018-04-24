@@ -99,6 +99,8 @@ ko.components.register('chart', {
                     self.updateExtremas(); // recalc extremas
                 }
 
+                self.onTaSettingsChange();
+
                 // Sets zoom level to the last one specified
                 if(self.xExtremes) {
                     self.chart.xAxis[0].setExtremes(self.xExtremes.min, self.xExtremes.max, false, false);
@@ -474,7 +476,7 @@ ko.components.register('chart', {
             self.removeSeriesByIdPrefix(self.maSeriesIdPrefix);
         };
 
-        self.onTaSettingsChange = (settings) => {
+        self.onTaSettingsChange = () => {
 
             self.hideMovingAverages();
 
