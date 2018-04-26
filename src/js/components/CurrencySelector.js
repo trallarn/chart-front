@@ -36,12 +36,12 @@ ko.components.register('currencySelector', {
         };
 
         self.onChangeDebounced = _.debounce(self.internalOnChange , 500);
-        self.selectedCurrency.subscribe(self.onChangeDebounced);
-        self.inverted.subscribe(self.onChangeDebounced);
 
         $.getJSON(self.url)
             .then((data) => {
                 self.currencies(data);
+                self.selectedCurrency.subscribe(self.onChangeDebounced);
+                self.inverted.subscribe(self.onChangeDebounced);
             })
             .fail(e => console.error(e));
 
