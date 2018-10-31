@@ -24,6 +24,7 @@ $(document).ready(function() {
         templateContainer.append(toKOTemplate('rowTemplateFavorite', require('./templates/rowTemplateFavorite.html')));
         templateContainer.append(toKOTemplate('rowTemplateChange', require('./templates/rowTemplateChange.html')));
         templateContainer.append(toKOTemplate('rowTemplateDefault', require('./templates/rowTemplateDefault.html')));
+        templateContainer.append(toKOTemplate('rowTemplateIndex', require('./templates/rowTemplateIndex.html')));
         templateContainer.append(toKOTemplate('favoritesGroup', require('./templates/favoritesGroup.html')));
         templateContainer.append(toKOTemplate('winnerLoser', require('./templates/winnerLoser.html')));
     };

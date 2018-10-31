@@ -3,8 +3,8 @@
  */
 module.exports = {
 
-    defaultSpec: function() {
-        var columns = [
+    baseColumns: function() {
+        return [
             {
                 name: '',
                 sorted:0,
@@ -29,7 +29,18 @@ module.exports = {
                 order: 20
             }
         ];
+    },
 
+    defaultSpec: function() {
+
+        let columns = this.baseColumns().concat([
+            {
+                name: 'Sector',
+                prop: 'sector',
+                sorted:0,
+                order: 12
+            }
+        ]);
         addSort(columns);
 
         return {
@@ -39,10 +50,20 @@ module.exports = {
 
     },
 
-    changeSpec: function() {
-        var defaultSpec = this.defaultSpec();
+    indexSpec: function() {
 
-        var columns = defaultSpec.columns.concat([
+        let columns = this.baseColumns();
+        addSort(columns);
+
+        return {
+            columns: columns,
+            rowTemplate: 'rowTemplateIndex'
+        };
+
+    },
+
+    changeSpec: function() {
+        var columns = this.defaultSpec().columns.concat([
             {
                 name: 'Change [%]',
                 getVal: function(row) { return row.extra.change.change; },
@@ -72,9 +93,7 @@ module.exports = {
     },
 
     errorSpec: function() {
-        var defaultSpec = this.defaultSpec();
-
-        var columns = defaultSpec.columns.concat([
+        var columns = this.baseColumns().concat([
             {
                 name: 'Error',
                 getVal: function(row) { return row.extra.error; },
@@ -92,9 +111,7 @@ module.exports = {
     },
     
     favoriteSpec: function() {
-        var defaultSpec = this.defaultSpec();
-
-        var columns = defaultSpec.columns;
+        var columns = this.baseColumns();
 
         addSort(columns);
 
@@ -107,7 +124,7 @@ module.exports = {
 
 function addSort(columns) {
     columns.sort(function(el1, el2) {
-        return el1.order === el2.order ? 0 : el1.order > el2.order;
+        return el1.order === el2.order ? 0 : el1.order > el2.order ? 1 : -1;
     });
 }
 

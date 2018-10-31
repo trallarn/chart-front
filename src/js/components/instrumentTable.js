@@ -37,6 +37,7 @@ ko.components.register('instrumentTable', {
                 : asc > 0 ? val1Greater : val1Greater * -1;
         };
 
+        this.showSector = listElement => !!listElement.sector;
     },
     template: require('../templates/instrumentTable.html')
 });

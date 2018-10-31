@@ -3,6 +3,13 @@
     <td class="instrument-table-body-row" data-bind="text: name"></td>
     <td class="instrument-table-body-row" data-bind="text: symbol"></td>
 
+    <!-- ko if: $parent.showSector($data) -->
+        <td class="instrument-table-body-row" data-bind="text: sector"></td>
+    <!-- /ko -->
+    <!-- ko ifnot: $parent.showSector($data) -->
+        <td class="instrument-table-body-row" ></td>
+    <!-- /ko -->
+
     <!-- ko if: $data.extra.error -->
     <td class="instrument-table-body-row" data-bind="text: extra.error"></td>
     <!-- /ko -->

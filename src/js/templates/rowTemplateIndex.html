@@ -2,14 +2,6 @@
     <td class="instrument-table-body-row" ><a data-bind="text: $index"></a></td>
     <td class="instrument-table-body-row" data-bind="text: name"></td>
     <td class="instrument-table-body-row" data-bind="text: symbol"></td>
-
-    <!-- ko if: $parent.showSector($data) -->
-        <td class="instrument-table-body-row" data-bind="text: sector"></td>
-    <!-- /ko -->
-    <!-- ko ifnot: $parent.showSector($data) -->
-        <td class="instrument-table-body-row" ></td>
-    <!-- /ko -->
-
     <td class="instrument-table-body-row" data-bind="click: $parent.actions.onCompareClick, clickBubble: false">Comp</td>
     <td class="instrument-table-body-row" data-bind="click: $parent.actions.onAddToFavoriteClick, clickBubble: false">Fave</td>
 </tr>
