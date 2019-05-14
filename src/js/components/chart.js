@@ -28,11 +28,18 @@ ko.components.register('chart', {
         this.maSeriesIdPrefix = 'ma-';
         this.comparedSeriesIdPrefix = 'comp-';
 
+        this.compareTypes = ['value', 'percent'];
+        this.compareType = ko.observable('value');
+
         /**
          * Update data series on change of period.
          */
         this.selectedPeriod.subscribe(val => {
             this.updateChartSeries();
+        });
+
+        this.compareType.subscribe(val => {
+            this.setCompare(val);
         });
 
         /**
@@ -229,30 +236,13 @@ ko.components.register('chart', {
         this.setCompareChart = function() {
             self.updateMainSerie({ type: 'line' });
 
-            var y = self.chart.yAxis[0];
-            y.setCompare('percent');
-            y.update({
-                labels: {
-                    formatter: function () {
-                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                    }
-                }
-            });
-
+            self.setCompare('percent');
         };
 
         this.setNoCompareChart = function() {
             self.updateMainSerie({ type: 'candlestick' });
 
-            var y = self.chart.yAxis[0];
-            y.setCompare();
-            y.update({
-                labels: {
-                    formatter: function () {
-                        return this.value;
-                    }
-                }
-            });
+            self.setCompare('value');
         };
 
         this.refreshData = function() {
@@ -440,6 +430,30 @@ ko.components.register('chart', {
         self.setLogarithmicScale = function() {
             var yAxis = self.chart.yAxis[0];
             yAxis.update({ type: 'logarithmic' });
+        };
+
+        self.setCompare = val => {
+            var y = self.chart.yAxis[0];
+
+            if (val === 'percent') {
+                y.update({
+                    labels: {
+                        formatter: function () {
+                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                        }
+                    }
+                }, false);
+            } else {
+                y.update({
+                    labels: {
+                        formatter: function () {
+                            return this.value;
+                        }
+                    }
+                }, false);
+            }
+            y.setCompare(val === 'value' ? null : val);
+            self.compareType(val);
         };
 
         self.showMovingAverages = settings => {

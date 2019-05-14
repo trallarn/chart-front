@@ -4,22 +4,22 @@
   "description": "",
   "main": "src/js/app.js",
   "dependencies": {
-    "brfs": "^1.4.3",
-    "highcharts": "^6.1.0",
-    "http-server": "^0.9.0",
-    "jquery": "^2.2.4",
+    "brfs": "^2.0.2",
+    "highcharts": "^6.2.0",
+    "http-server": "^0.11.1",
+    "jquery": "^3.4.1",
     "knockout": "^3.4.0",
     "moment": "^2.16.0",
     "pubsub-js": "^1.5.3",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "exorcist": "^0.4.0",
-    "node-sass": "^3.10.1",
+    "browserify": "^16.2.3",
+    "exorcist": "^1.0.1",
+    "node-sass": "^4.12.0",
     "stringify": "^5.1.0",
     "tape": "^4.5.1",
-    "watch": "^0.18.0",
+    "watch": "^1.0.2",
     "watchify": "^3.7.0"
   },
   "scripts": {
