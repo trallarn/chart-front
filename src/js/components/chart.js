@@ -31,6 +31,10 @@ ko.components.register('chart', {
         this.compareTypes = ['value', 'percent'];
         this.compareType = ko.observable('value');
 
+        this.numYAxisSelections = ['1 yaxis', '2 yaxis'];
+        this.numYAxis = ko.observable('1 axis');
+        this.compareYAxisIndex = 0;
+
         /**
          * Update data series on change of period.
          */
@@ -41,6 +45,22 @@ ko.components.register('chart', {
         this.compareType.subscribe(val => {
             this.setCompare(val);
         });
+
+        this.numYAxis.subscribe(val => {
+            let compareIdx = this.numYAxisSelections.indexOf(val);
+            this.setCompareYAxis(compareIdx);
+        });
+
+        this.setCompareYAxis = idx => {
+            self.compareYAxisIndex = idx;
+
+            console.log(`setting num yaxis to ${idx}`);
+            this.getComparedSeries().forEach(series => {
+                series.update({
+                    yAxis: self.compareYAxisIndex
+                });
+            });
+        };
 
         /**
          * Updates chart series data. Saves state.
@@ -134,6 +154,7 @@ ko.components.register('chart', {
 
                 return {
                     type: 'line',
+                    yAxis: self.compareYAxisIndex,
                     //type: 'ohlc',
                     id: self.toComparisonId(data.symbol),
                     name: data.symbol,
@@ -423,36 +444,39 @@ ko.components.register('chart', {
         };
         
         self.setLinearScale = function() {
-            var yAxis = self.chart.yAxis[0];
-            yAxis.update({ type: 'linear' });
+            self.chart.yAxis.forEach(yAxis => {
+                yAxis.update({ type: 'linear' });
+            });
         };
 
         self.setLogarithmicScale = function() {
-            var yAxis = self.chart.yAxis[0];
-            yAxis.update({ type: 'logarithmic' });
+            self.chart.yAxis.forEach(yAxis => {
+                yAxis.update({ type: 'logarithmic' });
+            });
         };
 
         self.setCompare = val => {
-            var y = self.chart.yAxis[0];
+            self.chart.yAxis.forEach(y => {
+                if (val === 'percent') {
+                    y.update({
+                        labels: {
+                            formatter: function() {
+                                return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                            }
+                        }
+                    }, false);
+                } else {
+                    y.update({
+                        labels: {
+                            formatter: function() {
+                                return this.value;
+                            }
+                        }
+                    }, false);
+                }
+                y.setCompare(val === 'value' ? null : val);
+            });
 
-            if (val === 'percent') {
-                y.update({
-                    labels: {
-                        formatter: function () {
-                            return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                        }
-                    }
-                }, false);
-            } else {
-                y.update({
-                    labels: {
-                        formatter: function () {
-                            return this.value;
-                        }
-                    }
-                }, false);
-            }
-            y.setCompare(val === 'value' ? null : val);
             self.compareType(val);
         };
 
@@ -507,9 +531,14 @@ ko.components.register('chart', {
          */
         this.createChart = function() {
             self.chart = Highcharts.StockChart('chart',  {
-                yAxis: {
+                yAxis: [{
+                    // Main axis
                     type: 'linear'
-                },
+                },{
+                    // Compare axis
+                    type: 'linear',
+                    opposite: false
+                }],
                 xAxis: {
                     events: {
                         setExtremes: function(e) {
