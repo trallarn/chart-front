@@ -41,6 +41,11 @@ ko.components.register('instrumentListsInstruments', {
                 tableSpec: InstrumentTableSpec.indexSpec()
             },
             {
+                name: 'Housing',
+                url:  settings.withQuoteAPIBase('/indexComponents/Housing?callback=?'),
+                tableSpec: InstrumentTableSpec.indexSpec()
+            },
+            {
                 name: 'Commodities',
                 url:  settings.withQuoteAPIBase('/indexComponents/Commodities?callback=?'),
                 tableSpec: InstrumentTableSpec.indexSpec()
