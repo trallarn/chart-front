@@ -51,10 +51,15 @@ ko.components.register('instrumentListsInstruments', {
                 tableSpec: InstrumentTableSpec.indexSpec()
             },
             {
+                name: 'Stockholm sectors',
+                url:  settings.withQuoteAPIBase('/indexComponents/SthlmSectors?callback=?'),
+                tableSpec: InstrumentTableSpec.indexSpec()
+            },
+            {
                 name: 'Stockholm',
                 url:  settings.withQuoteAPIBase('/indexComponents/stockholm?callback=?'),
                 tableSpec: InstrumentTableSpec.defaultSpec()
-            }
+            },
         ]);
 
         this.chartedInstrument = params.chartedInstrument;
