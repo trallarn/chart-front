@@ -10,5 +10,9 @@
 
     .instrument-table-body-row {
         padding-right: $rowPadding;
+        max-width: 370px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
