@@ -31,6 +31,8 @@ ko.components.register('chart', {
         this.compareTypes = ['value', 'percent'];
         this.compareType = ko.observable('value');
 
+        this.removePeaks = ko.observable(true);
+
         this.numYAxisSelections = ['1 yaxis', '2 yaxis'];
         this.numYAxis = ko.observable('1 axis');
         this.compareYAxisIndex = 0;
@@ -102,6 +104,8 @@ ko.components.register('chart', {
                     }
                 }
             }
+
+            url += "&rem_peaks=" + (self.removePeaks() ? 1 : 0);
 
             return url;
         };
