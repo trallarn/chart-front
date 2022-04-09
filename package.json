@@ -9,7 +9,7 @@
     "http-server": "^0.11.2",
     "jquery": "^3.6.0",
     "knockout": "^3.5.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "pubsub-js": "^1.9.4",
     "underscore": "^1.13.1"
   },
