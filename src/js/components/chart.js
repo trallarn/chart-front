@@ -21,6 +21,7 @@ ko.components.register('chart', {
         this.taUrl = settings.withPyQuoteAPIBase('/technical-analysis/{period}/{symbol}?mas={mas}&callback=?');
         this.periods = ['daily','weekly','monthly'];
         this.selectedPeriod = ko.observable('daily');
+        this.isFolded = ko.observable(false);
 
         this.isLoadingState = ko.observable(false);
         this.isLoadingStateSubscription = false;
@@ -457,6 +458,10 @@ ko.components.register('chart', {
             self.chart.yAxis.forEach(yAxis => {
                 yAxis.update({ type: 'logarithmic' });
             });
+        };
+
+        self.toggleFold = function() {
+            self.isFolded(!self.isFolded());
         };
 
         self.setCompare = val => {

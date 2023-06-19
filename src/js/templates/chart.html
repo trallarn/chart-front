@@ -6,8 +6,8 @@
         <select data-bind="options: periods, value: selectedPeriod" ></select>
         <select data-bind="options: compareTypes, value: compareType" ></select>
         <select data-bind="options: numYAxisSelections, value: numYAxis" ></select>
-        <label class="display-block" >Rem peaks<input type="checkbox" data-bind="checked: removePeaks"></input>
-        </label>
+        <label class="display-block" >Rem peaks<input type="checkbox" data-bind="checked: removePeaks"></input> </label>
+        <button data-bind="click: toggleFold">Show/hide</button>
 
         <div class="display-inline-block" >
             <!-- ko component: {
@@ -37,5 +37,5 @@
             <!-- /ko -->
         </div>
     </div>
-    <div id="chart" class="chart" ></div>
+    <div id="chart" class="chart" data-bind="css: { 'chart--folded': isFolded }"></div>
 </div>
