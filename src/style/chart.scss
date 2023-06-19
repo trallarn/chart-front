@@ -2,8 +2,9 @@
     height: 100%;
 
     .chart {
-        // Leave some room for the .chart-controls
-        height: calc(100% - 25px);
+        &.chart--folded {
+            display: none;
+        }
     }
 
     .chart-controls {
