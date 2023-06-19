@@ -33,7 +33,7 @@
     "watch-testchart-js": "watchify -t stringify -e src/js/chart.js -o 'exorcist static/js/bundle-testchart.js.map > static/js/bundle-testchart.js' -d",
     "watch": "npm run watch-testchart-js & npm run watch-js & npm run watch-html & npm run watch-style-sass",
     "build": "npm run build-js & npm run build-html & npm run build-style-sass",
-    "start": "http-server static/"
+    "start": "http-server -p 8080 static/"
   },
   "browserify": {
     "transform": [
