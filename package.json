@@ -24,8 +24,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-html": "mkdir -p static/html && cp -r src/html/* static/html/",
-    "watch-html": "watch 'cp -r src/html/* static/html/' src/html/ ",
+    "build-html": "bin/build-html.sh",
+    "watch-html": "watch 'bin/build-html.sh' src/html/ ",
     "build-style-sass": "mkdir -p static/style && node-sass src/style/all.scss -o static/style/",
     "watch-style-sass": "npm run build-style-sass && node-sass --watch  src/style/all.scss -o static/style/ ",
     "build-js": "mkdir -p static/js && browserify --debug -t stringify --extensions .html -e src/js/app.js src/js/**/* | exorcist static/js/bundle.js.map > static/js/bundle.js",
