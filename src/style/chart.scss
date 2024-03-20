@@ -1,14 +1,17 @@
 .chart-component {
-    height: 100%;
+    // The chart takes up more than the parent on load without the height setting
+    height: 92%;
+    display: flex;
+    flex-direction: column;
 
     .chart {
         &.chart--folded {
             display: none;
         }
+        flex-grow: 1;
     }
 
     .chart-controls {
-
         .input-s {
             width: 70px;
         }

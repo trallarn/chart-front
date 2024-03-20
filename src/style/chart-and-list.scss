@@ -2,13 +2,11 @@
     height: 100%;
     font-family: monospace;
     position: absolute;
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
 
     .chart-and-list__list {
-        height: 100%;
         flex-grow: 1;
         overflow: auto;
         margin-left: 10px;
