@@ -1,6 +1,6 @@
 var _ = require('underscore');
 
-var env = require('../../../.env');
+var env = require('../env');
 
 /**
  * Loads environment variables.
@@ -29,7 +29,7 @@ var validationErrors = [];
 
 _.each(expectedVariables, function(expected) {
     if(!settings[expected]) {
-        validationErrors.push('Missing environment variable "' + expected + '" in .env.js in project base');
+        validationErrors.push('Missing environment variable "' + expected + '" in env.js in project base');
     }
 });
 
