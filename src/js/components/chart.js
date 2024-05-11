@@ -574,12 +574,29 @@ ko.components.register('chart', {
                         count: 6,
                         text: '6m'
                     }, {
-                        type: 'ytd',
-                        text: 'YTD'
-                    }, {
                         type: 'year',
                         count: 1,
                         text: '1y'
+                    }, {
+                        type: 'year',
+                        count: 3,
+                        text: '3y'
+                    }, {
+                        type: 'year',
+                        count: 5,
+                        text: '5y'
+                    }, {
+                        type: 'year',
+                        count: 10,
+                        text: '10y'
+                    }, {
+                        type: 'year',
+                        count: 15,
+                        text: '15y'
+                    }, {
+                        type: 'year',
+                        count: 25,
+                        text: '25y'
                     }, {
                         type: 'all',
                         text: 'All'
